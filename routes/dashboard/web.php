@@ -7,5 +7,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('/', function () {
         return view('dashboard.index');
     });
+
+    Route::resource('faculties', 'FacultyController');
 });
 

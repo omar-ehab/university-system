@@ -24,4 +24,6 @@
 
     <!-- Custom Theme Style -->
     <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
+    <!-- Noty css -->
+    <link href="{{ asset('vendors/noty/noty.css') }}" rel="stylesheet">
 </head>
