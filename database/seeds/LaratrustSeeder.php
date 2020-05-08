@@ -60,6 +60,7 @@ class LaratrustSeeder extends Seeder
                 $user = \App\User::create([
                     'name' => ucwords(str_replace('_', ' ', $key)),
                     'email' => $key . '@app.com',
+                    'mobile' => '01113060202',
                     'password' => bcrypt('password'),
                     'gender' => 'male',
                     'nationality' => 'Egyptian',

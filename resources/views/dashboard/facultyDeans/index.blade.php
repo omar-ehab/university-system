@@ -5,11 +5,11 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-university" aria-hidden="true"></i> Faculties
+                    <i class="far fa-users" aria-hidden="true"></i> Faculty Deans
 
                 </h2>
                 <div class="clearfix"></div>
-                <a href="{{ route('dashboard.faculties.create') }}">
+                <a href="{{ route('dashboard.faculty_deans.create') }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
             </div>
@@ -23,34 +23,43 @@
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
-                                        colspan="1" aria-sort="ascending" style="width: 50px">#
+                                        colspan="1" aria-sort="ascending">#
                                     </th>
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
                                         colspan="1" aria-sort="ascending"
-                                        aria-label="Name: activate to sort column descending" style="width: 263px;">Name
+                                        aria-label="Name: activate to sort column descending">Name
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending" style="width: 50px;">
-                                        Code
+                                        aria-label="Code: activate to sort column ascending">
+                                        Email
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending" style="width: 250px;">
-                                        Faculty Dean
+                                        aria-label="Code: activate to sort column ascending">
+                                        Mobile
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending"
-                                        style="width: 70px;">
-                                        Departments Count
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        Faculty
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Classrooms Count: activate to sort column ascending"
-                                        style="width: 70px;">
-                                        Classrooms Count
+                                        aria-label="Classrooms Count: activate to sort column ascending">
+                                        Gender
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending"
-                                        style="width: 70px;">
-                                        Students Count
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Nationality
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Birth date
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        National Id
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Religion
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
@@ -58,30 +67,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($faculties as $index => $faculty)
+                                @foreach($heads as $index => $head)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $faculty->name }}</td>
-                                        <td>{{ $faculty->code }}</td>
-                                        <td>{{ $faculty->dean->user->name ?? '--' }}</td>
-                                        <td>{{ $faculty->departments_count }}</td>
-                                        <td>{{ $faculty->classrooms_count }}</td>
-                                        <td>{{ $faculty->students_count }}</td>
+                                        <td>{{ $head->name }}</td>
+                                        <td><a href="mailto:{{ $head->email }}"
+                                               style="text-decoration: underline">{{ $head->email }}</a></td>
+                                        <td>{{ $head->mobile }}</td>
+                                        <td>{{ $head->headFaculty->faculty->name }}</td>
+                                        <td>{{ ucfirst($head->gender) }}</td>
+                                        <td>{{ ucfirst($head->nationality) }}</td>
+                                        <td>{{ $head->birth_date }}</td>
+                                        <td>{{ $head->national_id }}</td>
+                                        <td>{{ ucfirst($head->religion) }}</td>
                                         <td>
-                                            <a href="{{ route('dashboard.faculties.show', $faculty->id) }}">
-                                                <button class="btn btn-primary">
-                                                    <i class="fa fa-eye"></i>
-                                                    Show
-                                                </button>
-                                            </a>
-                                            <a href="{{ route('dashboard.faculties.edit', $faculty->id) }}">
+                                            <a href="{{ route('dashboard.faculty_deans.edit', $head->headFaculty->id) }}">
                                                 <button class="btn btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                     Edit
                                                 </button>
                                             </a>
-                                            <form action="{{ route('dashboard.faculties.destroy', $faculty->id) }}"
-                                                  method="post" style="display: inline">
+                                            <form
+                                                action="{{ route('dashboard.faculty_deans.destroy', $head->headFaculty->id) }}"
+                                                method="post" style="display: inline">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-danger delete">

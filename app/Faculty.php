@@ -22,4 +22,9 @@ class Faculty extends Model
     {
         return $this->hasManyThrough(Student::class, Department::class);
     }
+
+    public function dean()
+    {
+        return $this->hasOne(HeadFaculty::class);
+    }
 }

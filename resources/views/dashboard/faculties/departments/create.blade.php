@@ -5,19 +5,18 @@
         <div class="col-md-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Edit Faculty</h2>
+                    <h2>Add new Department</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     <br>
                     <form class="form-horizontal form-label-left input_mask" method="post"
-                          action="{{ route('dashboard.faculties.update', $faculty->id) }}">
+                          action="{{ route('dashboard.faculties.departments.store', $faculty_id) }}">
                         @csrf
-                        @method('put')
                         <div class="col-xs-12 form-group @error('name') bad @enderror">
-                            <label for="name">Faculty Name</label>
+                            <label for="name">Department Name</label>
                             <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Name" value="{{ $faculty->name }}">
+                                   placeholder="Name" value="{{ old('name') }}">
 
                             @error('name')
                             <span class="text-danger">{{ $message }}</span>
@@ -26,17 +25,26 @@
                         </div>
 
                         <div class="col-xs-12 form-group @error('code') bad @enderror">
-                            <label for="code">Faculty Code</label>
+                            <label for="code">Department Code</label>
                             <input type="text" class="form-control" id="code" name="code" placeholder="Code"
-                                   value="{{ $faculty->code }}">
+                                   value="{{ old('code') }}">
                             @error('code')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="col-xs-12 form-group @error('floor') bad @enderror">
+                            <label for="floor">Department Floor</label>
+                            <input type="text" class="form-control" id="floor" name="floor" placeholder="Floor"
+                                   value="{{ old('floor') }}">
+                            @error('floor')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-12">
-                                <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Edit Faculty
+                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Add Department
                                 </button>
                                 {{--                                <button class="btn btn-primary btn-sm" type="reset">Clear inputs</button>--}}
                             </div>

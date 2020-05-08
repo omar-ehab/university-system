@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Faculty;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,11 +55,12 @@ class FacultyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Faculty $faculty
+     * @param $id
      * @return Factory|View
      */
-    public function show(Faculty $faculty)
+    public function show($id)
     {
+        $faculty = Faculty::withCount('departments', 'students', 'classrooms')->where('id', $id)->firstOrFail();
         return view('dashboard.faculties.show', compact('faculty'));
     }
 
@@ -79,11 +81,18 @@ class FacultyController extends Controller
      *
      * @param Request $request
      * @param Faculty $faculty
-     * @return void
+     * @return RedirectResponse
+     * @throws ValidationException
      */
     public function update(Request $request, Faculty $faculty)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string',
+            'code' => 'required|string',
+        ]);
+        $faculty->update($request->all());
+        session()->flash('success', 'Faculty Updated Successfully');
+        return redirect()->route('dashboard.faculties.index');
     }
 
     /**
@@ -102,5 +111,23 @@ class FacultyController extends Controller
             session()->flash('error', 'Can\'t Delete Faculty Because it has data associated with it');
             return redirect()->route('dashboard.faculties.index');
         }
+    }
+
+    public function edit_head($faculty_id)
+    {
+        $deans = User::whereRoleIs('headFaculty')->get();
+        $oldDean = Faculty::find($faculty_id)->dean;
+        return view('dashboard.faculties.edit_dean', compact('deans', 'oldDean', 'faculty_id'));
+    }
+
+    public function update_head(Request $request, $faculty_id)
+    {
+        $this->validate($request, [
+            'dean_id'
+        ]);
+        $dean = Faculty::find($faculty_id)->dean;
+        $dean->update(['user_id' => $request->dean_id]);
+        session()->flash('success', 'Faculty Dean Changed Successfully');
+        return redirect()->route('dashboard.faculties.show', $faculty_id);
     }
 }

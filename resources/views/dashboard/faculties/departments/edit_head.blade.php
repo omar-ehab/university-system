@@ -5,7 +5,7 @@
         <div class="col-md-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Add new Faculty</h2>
+                    <h2>Change Department Head</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -13,24 +13,7 @@
                     <form class="form-horizontal form-label-left input_mask" method="post"
                           action="{{ route('dashboard.faculties.store') }}">
                         @csrf
-                        <div class="col-xs-12 form-group @error('name') bad @enderror">
-                            <label for="name">Faculty Name</label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                   placeholder="Name" value="{{ old('name') }}">
-
-                            @error('name')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
-
-                        </div>
-
-                        <div class="col-xs-12 form-group @error('code') bad @enderror">
-                            <label for="code">Faculty Code</label>
-                            <input type="text" class="form-control" id="code" name="code" placeholder="Code"
-                                   value="{{ old('code') }}">
-                            @error('code')
-                            <span class="text-danger">{{ $message }}</span>
-                            @enderror
+                        <div class="col-xs-12 form-group">
                         </div>
 
                         <div class="form-group">

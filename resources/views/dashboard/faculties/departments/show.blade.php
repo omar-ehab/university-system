@@ -5,7 +5,7 @@
         <div class="col-md-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>{{ $faculty->name }}</h2>
+                    <h2>{{ $department->name }}</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -21,27 +21,39 @@
                                 <tbody>
                                 <tr>
                                     <td>Name</td>
-                                    <td>{{ $faculty->name }}</td>
+                                    <td>{{ $department->name }}</td>
                                 </tr>
                                 <tr>
                                     <td>Code</td>
-                                    <td>{{ $faculty->code }}</td>
+                                    <td>{{ $department->code }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Faculty Dean</td>
-                                    <td>{{ $faculty->dean->user->name ?? '--' }}</td>
+                                    <td>Floor</td>
+                                    <td>{{ $department->floor }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Departments</td>
-                                    <td>{{ $faculty->departments_count }}</td>
+                                    <td>Department Head</td>
+                                    <td>{{ $department->head->name ?? '--' }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Students</td>
-                                    <td>{{ $faculty->students_count }}</td>
+                                    <td>Courses Count</td>
+                                    <td>{{ $department->courses_count }}</td>
                                 </tr>
                                 <tr>
-                                    <td>Classrooms</td>
-                                    <td>{{ $faculty->classrooms_count }}</td>
+                                    <td>Teachers Count</td>
+                                    <td>{{ $department->teachers_count }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Teacher Assistants Count</td>
+                                    <td>{{ $department->teacher_assistants_count }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Academic Advisors Count</td>
+                                    <td>{{ $department->academic_advisors_count }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Students Count</td>
+                                    <td>{{ $department->students_count }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -49,24 +61,19 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <a href="{{ route('dashboard.faculties.edit_head', $faculty->id) }}">
+                            <a href="#">
                                 <button class="btn btn-primary"><i class="fa fa-edit"></i>
-                                    Edit Faculty Dean
+                                    Edit Department Head
                                 </button>
                             </a>
-                            <a href="{{ route('dashboard.faculties.edit', $faculty->id) }}">
+                            <a href="{{ route('dashboard.faculties.departments.edit', [$faculty_id, $department->id]) }}">
                                 <button class="btn btn-warning"><i class="fa fa-edit"></i>
                                     Edit
                                 </button>
                             </a>
-                            <a href="{{ route('dashboard.faculties.departments.index', $faculty->id) }}">
-                                <button class="btn btn-success">
-                                    <i class="fa fa-eye"></i>
-                                    Departments
-                                </button>
-                            </a>
-                            <form action="{{ route('dashboard.faculties.destroy', $faculty->id) }}"
-                                  method="post" style="display: inline">
+                            <form
+                                action="{{ route('dashboard.faculties.departments.destroy', [$faculty_id, $department->id]) }}"
+                                method="post" style="display: inline">
                                 @csrf
                                 @method('delete')
                                 <button type="submit" class="btn btn-danger delete"><i
@@ -83,4 +90,5 @@
         </div>
     </div>
 @endsection
+
 
