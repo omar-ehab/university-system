@@ -9,9 +9,10 @@ class DatabaseSeeder extends Seeder
      *
      * @return void
      */
+    // afnan
+    //rewan
     public function run()
     {
         $this->call(LaratrustSeeder::class);
-
     }
 }
