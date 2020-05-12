@@ -12,7 +12,6 @@ class DatabaseSeeder extends Seeder
     // afnan
     public function run()
     {
-
-         $this->call(LaratrustSeeder::class);
+      $this->call(LaratrustSeeder::class);
     }
 }
