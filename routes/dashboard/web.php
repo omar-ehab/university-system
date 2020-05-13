@@ -4,9 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
-    Route::get('/', function () {
-        return view('dashboard.index');
-    })->name('home');
+    Route::get('/', 'HomeController@index')->name('home');
 
     Route::resource('faculties', 'FacultyController');
     Route::get('faculties/{faculty}/edit_head', 'FacultyController@edit_head')->name('faculties.edit_head');
