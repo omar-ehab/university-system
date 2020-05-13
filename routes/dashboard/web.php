@@ -19,5 +19,11 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::resource('faculty_deans', 'HeadFacultyController')->except('show');
     Route::resource('head_departments', 'HeadDepartmentController')->except('show');
 
+    Route::middleware('role:student')->group(function () {
+
+        //type students routes here
+
+    });
+
 });
 
