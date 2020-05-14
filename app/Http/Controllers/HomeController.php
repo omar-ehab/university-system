@@ -11,6 +11,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        //if(auth()->user()->hasRole('Student'))
+       // {
+          //  return view('dashboard.student-index');
+
+     //   }
+//else
+       return view('home');
     }
 }
