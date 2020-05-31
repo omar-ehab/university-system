@@ -22,8 +22,8 @@ class CreateCourseClassroomTable extends Migration
             $table->unsignedBigInteger('term_id');
             $table->foreign('term_id')->references('id')->on('terms');
             $table->integer('day_number');
-            $table->timestamp('from');
-            $table->timestamp('to');
+            $table->timestamp('from')->nullable();
+            $table->timestamp('to')->nullable();
             $table->timestamps();
         });
     }
