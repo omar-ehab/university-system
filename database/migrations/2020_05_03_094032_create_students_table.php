@@ -19,10 +19,15 @@ class CreateStudentsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
+            $table->unsignedBigInteger('academic_advisor_id');
+            $table->foreign('academic_advisor_id')->references('id')->on('academic_advisors');
             $table->string('student_id')->unique();
             $table->double('cgpa')->default(0);
             $table->boolean('graduated')->default(0);
+           
             $table->timestamps();
+
+            
         });
     }
 

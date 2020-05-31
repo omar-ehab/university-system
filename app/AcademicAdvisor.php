@@ -17,4 +17,9 @@ class AcademicAdvisor extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function student()
+    {
+        return $this->hasMany(Student::class);
+    }
 }
