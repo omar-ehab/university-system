@@ -22,8 +22,8 @@ class HeadDepartmentController extends Controller
      */
     public function index()
     {
-        $heads = User::whereRoleIs('headDepartment')->with('department')->get();
-        return view('dashboard.HeadDepartments.index', compact('heads'));
+        $heads = User::whereRoleIs('headDepartment')->with('headDepartment.department')->get();
+        return view('dashboard.teachers.index', compact('heads'));
     }
 
     /**
@@ -34,7 +34,7 @@ class HeadDepartmentController extends Controller
     public function create()
     {
         $faculties = Faculty::all();
-        return view('dashboard.HeadDepartments.create', compact('faculties'));
+        return view('dashboard.teachers.create', compact('faculties'));
     }
 
     /**
@@ -79,7 +79,7 @@ class HeadDepartmentController extends Controller
     {
         $faculties = Faculty::all();
         $head = HeadDepartment::with('user', 'department')->where('id', $id)->firstOrFail();
-        return view('dashboard.facultyDeans.edit', compact('faculties', 'head'));
+        return view('dashboard.teachers.edit', compact('faculties', 'head'));
     }
 
     /**
@@ -96,7 +96,7 @@ class HeadDepartmentController extends Controller
         $this->validate($request, [
             'department_id' => 'required',
             'name' => 'required',
-            'email' => 'required|email|max:255|unique:users',
+            'email' => 'required|max:255|unique:users,email,' . $head->user->id,
             'gender' => 'required|in:male,female',
             'mobile' => 'required|digits:11',
             'nationality' => 'required',

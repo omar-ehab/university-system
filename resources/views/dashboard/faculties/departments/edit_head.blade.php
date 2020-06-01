@@ -11,19 +11,28 @@
                 <div class="x_content">
                     <br>
                     <form class="form-horizontal form-label-left input_mask" method="post"
-                          action="{{ route('dashboard.faculties.store') }}">
+                          action="{{ route('dashboard.faculties.departments.update_head', [$faculty, $department->id]) }}">
                         @csrf
-                        <div class="col-xs-12 form-group">
+                        @method('put')
+                        <div class="col-xs-12 form-group @error('head_id') bad @enderror">
+                            <label for="head">Head Department</label>
+                            <select name="head_id" id="head" class="form-control">
+                                @foreach($users as $user)
+                                    <option
+                                        value="{{ $user->id }}" {{ $oldHead && $user->id == $oldHead->user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('head_id')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <div class="col-xs-12">
-                                <button type="submit" class="btn btn-success"><i class="fa fa-check"></i> Add Faculty
+                                <button type="submit" class="btn btn-success"><i class="fa fa-edit"></i> Change Head
                                 </button>
-                                {{--                                <button class="btn btn-primary btn-sm" type="reset">Clear inputs</button>--}}
                             </div>
                         </div>
-
                     </form>
                 </div>
             </div>

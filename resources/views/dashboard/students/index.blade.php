@@ -5,11 +5,11 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-users" aria-hidden="true"></i> Head Departments
+                    <i class="far fa-users" aria-hidden="true"></i> Students
 
                 </h2>
                 <div class="clearfix"></div>
-                <a href="{{ route('dashboard.head_departments.create') }}">
+                <a href="{{ route('dashboard.students.create') }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
             </div>
@@ -27,6 +27,10 @@
                                     </th>
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
                                         colspan="1" aria-sort="ascending"
+                                        aria-label="Name: activate to sort column descending">ID
+                                    </th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
                                         aria-label="Name: activate to sort column descending">Name
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
@@ -39,7 +43,15 @@
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Departments Count: activate to sort column ascending">
+                                        Faculty
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
                                         Department
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        CGPA
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Classrooms Count: activate to sort column ascending">
@@ -67,28 +79,31 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($heads as $index => $head)
+                                @foreach($students as $index => $student)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $head->name }}</td>
-                                        <td><a href="mailto:{{ $head->email }}"
-                                               style="text-decoration: underline">{{ $head->email }}</a></td>
-                                        <td>{{ $head->mobile }}</td>
-                                        <td>{{ $head->department->name }}</td>
-                                        <td>{{ ucfirst($head->gender) }}</td>
-                                        <td>{{ ucfirst($head->nationality) }}</td>
-                                        <td>{{ $head->birth_date }}</td>
-                                        <td>{{ $head->national_id }}</td>
-                                        <td>{{ ucfirst($head->religion) }}</td>
+                                        <td>{{ $student->student->student_id }}</td>
+                                        <td>{{ $student->name }}</td>
+                                        <td><a href="mailto:{{ $student->email }}"
+                                               style="text-decoration: underline">{{ $student->email }}</a></td>
+                                        <td>{{ $student->mobile }}</td>
+                                        <td>{{ $student->student->department->faculty->name }}</td>
+                                        <td>{{ $student->student->department->name }}</td>
+                                        <td>{{ $student->student->cgpa }}</td>
+                                        <td>{{ ucfirst($student->gender) }}</td>
+                                        <td>{{ ucfirst($student->nationality) }}</td>
+                                        <td>{{ $student->birth_date }}</td>
+                                        <td>{{ $student->national_id }}</td>
+                                        <td>{{ ucfirst($student->religion) }}</td>
                                         <td>
-                                            <a href="{{ route('dashboard.faculty_deans.edit', $head->headFaculty->id) }}">
+                                            <a href="{{ route('dashboard.students.edit', $student->student->id) }}">
                                                 <button class="btn btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                     Edit
                                                 </button>
                                             </a>
                                             <form
-                                                action="{{ route('dashboard.faculty_deans.destroy', $head->headFaculty->id) }}"
+                                                action="{{ route('dashboard.students.destroy', $student->student->id) }}"
                                                 method="post" style="display: inline">
                                                 @csrf
                                                 @method('delete')

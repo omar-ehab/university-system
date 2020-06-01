@@ -5,11 +5,11 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-users" aria-hidden="true"></i> Faculty Deans
+                    <i class="far fa-users" aria-hidden="true"></i> Teachers
 
                 </h2>
                 <div class="clearfix"></div>
-                <a href="{{ route('dashboard.faculty_deans.create') }}">
+                <a href="{{ route('dashboard.teachers.create') }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
             </div>
@@ -42,6 +42,10 @@
                                         Faculty
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        Department
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Classrooms Count: activate to sort column ascending">
                                         Gender
                                     </th>
@@ -67,28 +71,29 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($heads as $index => $head)
+                                @foreach($teachers as $index => $teacher)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $head->name }}</td>
-                                        <td><a href="mailto:{{ $head->email }}"
-                                               style="text-decoration: underline">{{ $head->email }}</a></td>
-                                        <td>{{ $head->mobile }}</td>
-                                        <td>{{ $head->headFaculty->faculty->name }}</td>
-                                        <td>{{ ucfirst($head->gender) }}</td>
-                                        <td>{{ ucfirst($head->nationality) }}</td>
-                                        <td>{{ $head->birth_date }}</td>
-                                        <td>{{ $head->national_id }}</td>
-                                        <td>{{ ucfirst($head->religion) }}</td>
+                                        <td>{{ $teacher->name }}</td>
+                                        <td><a href="mailto:{{ $teacher->email }}"
+                                               style="text-decoration: underline">{{ $teacher->email }}</a></td>
+                                        <td>{{ $teacher->mobile }}</td>
+                                        <td>{{ $teacher->teacher->department->faculty->name }}</td>
+                                        <td>{{ $teacher->teacher->department->name }}</td>
+                                        <td>{{ ucfirst($teacher->gender) }}</td>
+                                        <td>{{ ucfirst($teacher->nationality) }}</td>
+                                        <td>{{ $teacher->birth_date }}</td>
+                                        <td>{{ $teacher->national_id }}</td>
+                                        <td>{{ ucfirst($teacher->religion) }}</td>
                                         <td>
-                                            <a href="{{ route('dashboard.faculty_deans.edit', $head->headFaculty->id) }}">
+                                            <a href="{{ route('dashboard.teachers.edit', $teacher->teacher->id) }}">
                                                 <button class="btn btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                     Edit
                                                 </button>
                                             </a>
                                             <form
-                                                action="{{ route('dashboard.faculty_deans.destroy', $head->headFaculty->id) }}"
+                                                action="{{ route('dashboard.teachers.destroy', $teacher->teacher->id) }}"
                                                 method="post" style="display: inline">
                                                 @csrf
                                                 @method('delete')

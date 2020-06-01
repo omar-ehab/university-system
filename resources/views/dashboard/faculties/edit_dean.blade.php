@@ -17,9 +17,9 @@
                         <div class="col-xs-12 form-group">
                             <label for="dean">Faculty Dean</label>
                             <select name="dean_id" id="dean" class="form-control">
-                                @foreach($deans as $dean)
+                                @foreach($users as $user)
                                     <option
-                                        value="{{ $dean->id }}" {{ $dean->id == $oldDean->user->id ? 'selected' : '' }}>{{ $dean->name }}</option>
+                                        value="{{ $user->id }}" {{ $oldDean && $user->id == $oldDean->user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                                 @endforeach
                             </select>
                         </div>

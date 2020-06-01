@@ -5,13 +5,13 @@
         <div class="col-md-6 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Add New Head Department</h2>
+                    <h2>Add New Student</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     <br>
                     <form class="form-horizontal form-label-left input_mask" method="post"
-                          action="{{ route('dashboard.head_departments.store') }}">
+                          action="{{ route('dashboard.students.store') }}">
                         @csrf
 
                         <div class="col-xs-12 form-group">
@@ -35,6 +35,20 @@
                                 @endforeach
                             </select>
                             @error('department')
+                            <span class="text-danger">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="col-xs-12 form-group">
+                            <label for="academic_advisor_id">Academic Advisor</label>
+                            <select name="academic_advisor_id" id="academic_advisor_id"
+                                    class="form-control @error('academic_advisor_id') bad @enderror">
+                                @foreach($faculties->first()->departments->first()->academicAdvisors as $academicAdvisor)
+                                    <option
+                                        value="{{ $academicAdvisor->user->id }}">{{ $academicAdvisor->user->name }}</option>
+                                @endforeach
+                            </select>
+                            @error('academic_advisor_id')
                             <span class="text-danger">{{ $message }}</span>
                             @enderror
                         </div>
@@ -143,9 +157,8 @@
                             <div class="col-xs-12">
                                 <button type="submit" class="btn btn-success">
                                     <i class="fa fa-check"></i>
-                                    Add Faculty Dean
+                                    Add Student
                                 </button>
-                                {{--                                <button class="btn btn-primary btn-sm" type="reset">Clear inputs</button>--}}
                             </div>
                         </div>
 
@@ -170,6 +183,25 @@
                     $('#department').empty();
                     $.each(data, function (key, value) {
                         $('#department').append(`
+                            <option value="${value.id}">${value.name}</option>
+                        `);
+                    })
+                }
+            });
+        });
+        $('#department').on('change', function () {
+            let selectedDepartment = $(this).children("option:selected").val();
+            $.ajax({
+                type: "GET",
+                url: "{{ route('dashboard.get_advisors_by_department_ajax') }}",
+                data: {
+                    'department_id': selectedDepartment
+                },
+                cache: false,
+                success: function (data) {
+                    $('#academic_advisor_id').empty();
+                    $.each(data, function (key, value) {
+                        $('#academic_advisor_id').append(`
                             <option value="${value.id}">${value.name}</option>
                         `);
                     })

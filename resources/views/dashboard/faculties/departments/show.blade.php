@@ -33,7 +33,7 @@
                                 </tr>
                                 <tr>
                                     <td>Department Head</td>
-                                    <td>{{ $department->head->name ?? '--' }}</td>
+                                    <td>{{ $department->head->user->name ?? '--' }}</td>
                                 </tr>
                                 <tr>
                                     <td>Courses Count</td>
@@ -61,7 +61,7 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <a href="#">
+                            <a href="{{ route('dashboard.faculties.departments.edit_head', [$faculty_id, $department->id]) }}">
                                 <button class="btn btn-primary"><i class="fa fa-edit"></i>
                                     Edit Department Head
                                 </button>

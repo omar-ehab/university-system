@@ -33,18 +33,18 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dashboard.faculty_deans.index') }}">
+                        <a href="{{ route('dashboard.teachers.index') }}">
                             <i class="far fa-users"></i>
-                            Faculty Deans
+                            Teachers
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dashboard.head_departments.index') }}">
+                        <a href="{{ route('dashboard.teacher-assistants.index') }}">
                             <i class="far fa-users"></i>
-                            Head Departments
+                            Teachers Assistants
                         </a>
                     </li>
-                    <li><a href="#">
+                    <li><a href="{{ route('dashboard.students.index') }}">
                             <i class="far fa-users-class"></i>
                             Students
                         </a>

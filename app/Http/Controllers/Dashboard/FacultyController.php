@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -115,18 +116,26 @@ class FacultyController extends Controller
 
     public function edit_head($faculty_id)
     {
-        $deans = User::whereRoleIs('headFaculty')->get();
         $oldDean = Faculty::find($faculty_id)->dean;
-        return view('dashboard.faculties.edit_dean', compact('deans', 'oldDean', 'faculty_id'));
+        $users = User::with('teacher.department')->whereRoleIs(['headFaculty', 'teacher'])->get();
+        $users = $users->filter(function ($user) use ($faculty_id) {
+            return $user->teacher->department->faculty_id == $faculty_id;
+        });
+
+        return view('dashboard.faculties.edit_dean', compact('users', 'oldDean', 'faculty_id'));
     }
 
     public function update_head(Request $request, $faculty_id)
     {
         $this->validate($request, [
-            'dean_id'
+            'dean_id' => 'required'
         ]);
-        $dean = Faculty::find($faculty_id)->dean;
-        $dean->update(['user_id' => $request->dean_id]);
+        DB::transaction(function () use ($request, $faculty_id) {
+
+            $faculty = Faculty::find($faculty_id);
+            $faculty->dean->delete();
+            $faculty->dean()->create(['user_id' => $request->dean_id]);
+        });
         session()->flash('success', 'Faculty Dean Changed Successfully');
         return redirect()->route('dashboard.faculties.show', $faculty_id);
     }
