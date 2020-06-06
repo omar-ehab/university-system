@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Student extends Model
 {
-    protected $fillable = ['user_id', 'department_id', 'student_id', 'cgpa', 'graduated','academic_advisor_id'];
+    protected $fillable = ['user_id', 'department_id', 'student_id', 'cgpa', 'graduated', 'academic_advisor_id'];
 
     public function user()
     {
@@ -21,6 +21,11 @@ class Student extends Model
     public function academic_advisor()
     {
         return $this->belongsTo(AcademicAdvisor::class);
+    }
+
+    public function alerts()
+    {
+        return $this->hasMany(Alert::class);
     }
 
 }

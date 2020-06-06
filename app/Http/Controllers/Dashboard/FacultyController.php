@@ -131,9 +131,13 @@ class FacultyController extends Controller
             'dean_id' => 'required'
         ]);
         DB::transaction(function () use ($request, $faculty_id) {
-
             $faculty = Faculty::find($faculty_id);
-            $faculty->dean->delete();
+            if ($faculty->dean) {
+                $faculty->dean->user->detachRole('head_faculty');
+                $faculty->dean->delete();
+            }
+            $dean = User::find($request->dean_id);
+            $dean->attachRole('head_faculty');
             $faculty->dean()->create(['user_id' => $request->dean_id]);
         });
         session()->flash('success', 'Faculty Dean Changed Successfully');

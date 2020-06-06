@@ -9,9 +9,11 @@
 
                 </h2>
                 <div class="clearfix"></div>
+                @role('admin')
                 <a href="{{ route('dashboard.teacher-assistants.create') }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
+                @endrole
             </div>
             <div class="x_content">
                 <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
@@ -72,6 +74,7 @@
                                 </thead>
                                 <tbody>
                                 @foreach($teacherAssistants as $index => $assistant)
+
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $assistant->name }}</td>
@@ -86,7 +89,7 @@
                                         <td>{{ $assistant->national_id }}</td>
                                         <td>{{ ucfirst($assistant->religion) }}</td>
                                         <td>
-                                            @if(\App\AcademicAdvisor::where('user_id', $assistant->user_id)->where('department_id', $assistant->department_id)->first())
+                                            @if(!\App\AcademicAdvisor::where('user_id', $assistant->id)->where('department_id', $assistant->teacherAssistant->department_id)->first())
                                                 <a href="{{ route('dashboard.teacher-assistants.makeAcademicAdvisor', $assistant->teacherAssistant->id) }}">
                                                     <button class="btn btn-primary">
                                                         <i class="fa fa-edit"></i>
@@ -94,10 +97,12 @@
                                                     </button>
                                                 </a>
                                             @else
-                                                <button class="btn btn-primary disabled">
-                                                    <i class="fa fa-edit"></i>
-                                                    Make as an Academic Advisor
-                                                </button>
+                                                <a href="{{ route('dashboard.teacher-assistants.assignStudents', $assistant->teacherAssistant->id) }}">
+                                                    <button class="btn btn-primary">
+                                                        <i class="fa fa-users"></i>
+                                                        Assign Students
+                                                    </button>
+                                                </a>
                                             @endif
                                             <a href="{{ route('dashboard.teacher-assistants.edit', $assistant->teacherAssistant->id) }}">
                                                 <button class="btn btn-warning">

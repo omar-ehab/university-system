@@ -5,12 +5,12 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-users" aria-hidden="true"></i> Teachers
+                    <i class="fa fa-file" aria-hidden="true"></i> Materials
 
                 </h2>
                 <div class="clearfix"></div>
-                @role('admin')
-                <a href="{{ route('dashboard.teachers.create') }}">
+                @role('teacher')
+                <a href="{{ route('dashboard.materials.create', $course->id) }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
                 @endrole
@@ -25,47 +25,17 @@
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
-                                        colspan="1" aria-sort="ascending">#
+                                        colspan="1" aria-sort="ascending" style="width: 50px">#
                                     </th>
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
                                         colspan="1" aria-sort="ascending"
-                                        aria-label="Name: activate to sort column descending">Name
+                                        aria-label="Name: activate to sort column descending" style="width: 263px;">
+                                        Name
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending">
-                                        Email
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending">
-                                        Mobile
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Faculty
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Department
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Classrooms Count: activate to sort column ascending">
-                                        Gender
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Nationality
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Birth date
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        National Id
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Religion
+                                        aria-label="Students Count: activate to sort column ascending"
+                                        style="width: 150px;">
+                                        Uploaded At
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
@@ -73,35 +43,41 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($teachers as $index => $teacher)
+                                @foreach($materials as $index => $material)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $teacher->name }}</td>
-                                        <td><a href="mailto:{{ $teacher->email }}"
-                                               style="text-decoration: underline">{{ $teacher->email }}</a></td>
-                                        <td>{{ $teacher->mobile }}</td>
-                                        <td>{{ $teacher->teacher->department->faculty->name }}</td>
-                                        <td>{{ $teacher->teacher->department->name }}</td>
-                                        <td>{{ ucfirst($teacher->gender) }}</td>
-                                        <td>{{ ucfirst($teacher->nationality) }}</td>
-                                        <td>{{ $teacher->birth_date }}</td>
-                                        <td>{{ $teacher->national_id }}</td>
-                                        <td>{{ ucfirst($teacher->religion) }}</td>
                                         <td>
-                                            @role('admin')
-                                            <a href="{{ route('dashboard.teachers.edit', $teacher->teacher->id) }}">
-                                                <button class="btn btn-warning">
-                                                    <i class="fa fa-edit"></i>
-                                                    Edit
+                                            @if(pathinfo($material->name, PATHINFO_EXTENSION) == 'docx' || pathinfo($material->name, PATHINFO_EXTENSION) == 'doc')
+                                                <i class="fa fa-file-word-o" aria-hidden="true"></i>
+                                            @elseif(pathinfo($material->name, PATHINFO_EXTENSION) == 'xls' || pathinfo($material->name, PATHINFO_EXTENSION) == 'xlsx')
+                                                <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                            @elseif(pathinfo($material->name, PATHINFO_EXTENSION) == 'ppt' || pathinfo($material->name, PATHINFO_EXTENSION) == 'pptx')
+                                                <i class="fa fa-file-powerpoint-o" aria-hidden="true"></i>
+                                            @elseif(pathinfo($material->name, PATHINFO_EXTENSION) == 'jpg' || pathinfo($material->name, PATHINFO_EXTENSION) == 'jpeg' || pathinfo($material->name, PATHINFO_EXTENSION) == 'png')
+                                                <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                                            @elseif(pathinfo($material->name, PATHINFO_EXTENSION) == 'pdf')
+                                                <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                                            @else
+                                                <i class="fa fa-file-o" aria-hidden="true"></i>
+                                            @endif
+                                            {{ $material->name }}
+                                        </td>
+                                        <td>{{ $material->created_at->format('Y/m/d H:i A') }}</td>
+                                        <td>
+                                            <a href="{{ route('dashboard.materials.download', [$course->id, $material->id]) }}">
+                                                <button class="btn btn-primary">
+                                                    <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                                                    Download
                                                 </button>
                                             </a>
+                                            @role('teacher')
                                             <form
-                                                action="{{ route('dashboard.teachers.destroy', $teacher->teacher->id) }}"
+                                                action="{{ route('dashboard.materials.destroy', [$course->id, $material->id]) }}"
                                                 method="post" style="display: inline">
                                                 @csrf
                                                 @method('delete')
-                                                <button type="submit" class="btn btn-danger delete">
-                                                    <i class="fa fa-trash"></i>
+                                                <button class="btn btn-danger delete">
+                                                    <i class="fa fa-trash" aria-hidden="true"></i>
                                                     Delete
                                                 </button>
                                             </form>

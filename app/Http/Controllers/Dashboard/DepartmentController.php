@@ -152,7 +152,12 @@ class DepartmentController extends Controller
         ]);
         DB::transaction(function () use ($request, $department_id) {
             $department = Department::find($department_id);
-            $department->head->delete();
+            if ($department->head) {
+                $department->head->user->detachRole('head_department');
+                $department->head->delete();
+            }
+            $head = User::find($request->head_id);
+            $head->attachRole('head_department');
             $department->head()->create(['user_id' => $request->head_id]);
         });
         session()->flash('success', 'Faculty Dean Changed Successfully');

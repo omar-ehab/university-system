@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Alert;
+use App\Course;
 use App\Faculty;
 use App\Http\Controllers\Controller;
 use App\Teacher;
+use App\Term;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -59,14 +64,16 @@ class TeacherController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
         $request['password'] = bcrypt($request->password);
-        $user = User::create($request->all());
-        Teacher::create([
-            'user_id' => $user->id,
-            'department_id' => $request->department_id,
-        ]);
-        $user->attachRole('teacher');
+        DB::transaction(function () use ($request) {
+            $user = User::create($request->all());
+            Teacher::create([
+                'user_id' => $user->id,
+                'department_id' => $request->department_id,
+            ]);
+            $user->attachRole('teacher');
+        });
         session()->flash('success', 'Teacher Created Successfully');
-        return redirect()->route('dashboard.teachers.index');
+        return redirect()->route('dashboard.teacher-assistants.index');
     }
 
     /**
@@ -79,7 +86,7 @@ class TeacherController extends Controller
     {
         $faculties = Faculty::all();
         $teacher = Teacher::with('user', 'department')->where('id', $id)->firstOrFail();
-        return view('dashboard.teachers.edit', compact('faculties', 'teacher'));
+        return view('dashboard.teacher-assistants.edit', compact('faculties', 'teacher'));
     }
 
     /**
@@ -104,10 +111,12 @@ class TeacherController extends Controller
             'national_id' => 'required|digits:14',
             'religion' => 'required',
         ]);
-        $teacher->user->update($request->all());
-        $teacher->update(['department_id' => $request->department_id]);
+        DB::transaction(function () use ($request, $teacher) {
+            $teacher->user->update($request->all());
+            $teacher->update(['department_id' => $request->department_id]);
+        });
         session()->flash('success', 'Teacher Updated Successfully');
-        return redirect()->route('dashboard.teachers.index');
+        return redirect()->route('dashboard.teacher-assistants.index');
     }
 
     /**
@@ -119,14 +128,64 @@ class TeacherController extends Controller
     public function destroy($id)
     {
         try {
-            $teacher = Teacher::with('user')->where('id', $id)->firstOrFail();
-            $user = $teacher->user;
-            $teacher->delete();
-            $user->delete();
-            session()->flash('success', 'Teacher Deleted Successfully');
+            DB::transaction(function () use ($id) {
+                $teacher = Teacher::with('user')->where('id', $id)->firstOrFail();
+                $user = $teacher->user;
+                $teacher->delete();
+                $user->delete();
+            });
+            session()->flash('success', 'Teacher Assistant Deleted Successfully');
         } catch (\Exception $e) {
             session()->flash('error', 'Something went wrong please try again later');
         }
-        return redirect()->route('dashboard.teachers.index');
+        return redirect()->route('dashboard.teacher-assistants.index');
+    }
+
+
+    public function myCourses(Teacher $teacher)
+    {
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+        if ($currentTerm) {
+            $courses = $teacher->courses()->withCount('students')->where('term_id', $currentTerm->id)->get();
+            return view('dashboard.teachers.courses.index', compact('courses', 'teacher'));
+        }
+        $courses = $teacher->courses;
+        return view('dashboard.teachers.courses.index', compact('courses', 'teacher'));
+    }
+
+    public function myCourse(Teacher $teacher, $course)
+    {
+        $course = Course::withCount('students')->where('id', $course)->first();
+        return view('dashboard.teachers.courses.show', compact('course', 'teacher'));
+    }
+
+    public function courseStudents($teacher, Course $course)
+    {
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+        $students = $course->students()->where('term_id', $currentTerm->id)->get();
+        return view('dashboard.teachers.courses.students.index', compact('students', 'teacher'));
+    }
+
+    public function alerts(Teacher $teacher)
+    {
+        $ids = $teacher->courses->pluck('id');
+        $alerts = Alert::whereIn('course_id', $ids)->with('student', 'course')->orderBy('created_at')->get();
+        return view('dashboard.alerts.index', compact('alerts'));
+    }
+
+    public function approve_alert($teacher, Alert $alert)
+    {
+        $alert->update([
+            'published' => true
+        ]);
+        session()->flash('success', 'Alert Published Successfully');
+        return redirect()->back();
+    }
+
+    public function disprove_alert($teacher, Alert $alert)
+    {
+        $alert->delete();
+        session()->flash('success', 'Alert Disproved Successfully and has been deleted');
+        return redirect()->back();
     }
 }

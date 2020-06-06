@@ -5,15 +5,13 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-users" aria-hidden="true"></i> Teachers
+                    <i class="fa fa-clock-o" aria-hidden="true"></i> Terms
 
                 </h2>
                 <div class="clearfix"></div>
-                @role('admin')
-                <a href="{{ route('dashboard.teachers.create') }}">
+                <a href="{{ route('dashboard.terms.create') }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
-                @endrole
             </div>
             <div class="x_content">
                 <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
@@ -33,39 +31,19 @@
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Code: activate to sort column ascending">
-                                        Email
+                                        Starts At
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Code: activate to sort column ascending">
-                                        Mobile
+                                        Ends At
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Faculty
+                                        aria-label="Code: activate to sort column ascending">
+                                        Status
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Department
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Classrooms Count: activate to sort column ascending">
-                                        Gender
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Nationality
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Birth date
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        National Id
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Religion
+                                        aria-label="Code: activate to sort column ascending">
+                                        Registration Status
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
@@ -73,31 +51,53 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($teachers as $index => $teacher)
+                                @foreach($terms as $index => $term)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $teacher->name }}</td>
-                                        <td><a href="mailto:{{ $teacher->email }}"
-                                               style="text-decoration: underline">{{ $teacher->email }}</a></td>
-                                        <td>{{ $teacher->mobile }}</td>
-                                        <td>{{ $teacher->teacher->department->faculty->name }}</td>
-                                        <td>{{ $teacher->teacher->department->name }}</td>
-                                        <td>{{ ucfirst($teacher->gender) }}</td>
-                                        <td>{{ ucfirst($teacher->nationality) }}</td>
-                                        <td>{{ $teacher->birth_date }}</td>
-                                        <td>{{ $teacher->national_id }}</td>
-                                        <td>{{ ucfirst($teacher->religion) }}</td>
+                                        <td>{{ $term->name }}</td>
+                                        <td>{{ $term->start }}</td>
+                                        <td>{{ $term->end }}</td>
                                         <td>
-                                            @role('admin')
-                                            <a href="{{ route('dashboard.teachers.edit', $teacher->teacher->id) }}">
+                                            @if(\Carbon\Carbon::now() > \Carbon\Carbon::parse($term->end))
+                                                <span class="term-status term-danger">Term Ended</span>
+                                            @elseif(\Carbon\Carbon::now() >= \Carbon\Carbon::parse($term->start) && \Carbon\Carbon::now() <= \Carbon\Carbon::parse($term->end))
+                                                <span class="term-status term-primary">Term Working</span>
+                                            @elseif(\Carbon\Carbon::now() < \Carbon\Carbon::parse($term->start))
+                                                <span class="term-status term-warning">Term not started yet</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($term->can_register)
+                                                <span class="term-status term-primary">Registration Opened</span>
+                                            @else
+                                                <span class="term-status term-danger">Registration Closed</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($term->can_register)
+                                                <a href="{{ route('dashboard.terms.close_registration', $term->id) }}">
+                                                    <button class="btn btn-primary">
+                                                        <i class="fa fa-edit"></i>
+                                                        Close Registration
+                                                    </button>
+                                                </a>
+                                            @else
+                                                <a href="{{ route('dashboard.terms.open_registration', $term->id) }}">
+                                                    <button class="btn btn-primary">
+                                                        <i class="fa fa-edit"></i>
+                                                        Open Registration
+                                                    </button>
+                                                </a>
+                                            @endif
+
+                                            <a href="{{ route('dashboard.terms.edit', $term->id) }}">
                                                 <button class="btn btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                     Edit
                                                 </button>
                                             </a>
-                                            <form
-                                                action="{{ route('dashboard.teachers.destroy', $teacher->teacher->id) }}"
-                                                method="post" style="display: inline">
+                                            <form action="{{ route('dashboard.terms.destroy', $term->id) }}"
+                                                  method="post" style="display: inline">
                                                 @csrf
                                                 @method('delete')
                                                 <button type="submit" class="btn btn-danger delete">
@@ -105,7 +105,6 @@
                                                     Delete
                                                 </button>
                                             </form>
-                                            @endrole
                                         </td>
                                     </tr>
                                 @endforeach

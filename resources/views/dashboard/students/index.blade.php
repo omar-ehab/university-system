@@ -9,9 +9,11 @@
 
                 </h2>
                 <div class="clearfix"></div>
+                @role('admin')
                 <a href="{{ route('dashboard.students.create') }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
+                @endrole
             </div>
             <div class="x_content">
                 <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">

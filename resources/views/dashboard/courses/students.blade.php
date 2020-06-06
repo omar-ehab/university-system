@@ -5,15 +5,42 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-users" aria-hidden="true"></i> Teachers
+                    <i class="far fa-users" aria-hidden="true"></i> Students
 
                 </h2>
                 <div class="clearfix"></div>
-                @role('admin')
-                <a href="{{ route('dashboard.teachers.create') }}">
-                    <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
-                </a>
-                @endrole
+                <h3>Filter By</h3>
+                <div class="row">
+                    <form action="{{ route('dashboard.courses.students', $course->id) }}">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="term_id">Term</label>
+                                <select name="term_id" id="term_id" class="form-control">
+                                    <option value="">All</option>
+                                    @foreach($terms as $term)
+                                        <option value="{{ $term->id }}">{{ $term->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select name="status" id="status" class="form-control">
+                                    <option value="">All</option>
+                                    <option value="passed">Passed</option>
+                                    <option value="failed">Failed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="x_content">
                 <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
@@ -26,6 +53,10 @@
                                 <tr role="row">
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
                                         colspan="1" aria-sort="ascending">#
+                                    </th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
+                                        aria-label="Name: activate to sort column descending">ID
                                     </th>
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
                                         colspan="1" aria-sort="ascending"
@@ -48,6 +79,10 @@
                                         Department
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        CGPA
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Classrooms Count: activate to sort column ascending">
                                         Gender
                                     </th>
@@ -67,46 +102,25 @@
                                         aria-label="Students Count: activate to sort column ascending">
                                         Religion
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Control: activate to sort column ascending">Control
-                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($teachers as $index => $teacher)
+                                @foreach($students as $index => $student)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $teacher->name }}</td>
-                                        <td><a href="mailto:{{ $teacher->email }}"
-                                               style="text-decoration: underline">{{ $teacher->email }}</a></td>
-                                        <td>{{ $teacher->mobile }}</td>
-                                        <td>{{ $teacher->teacher->department->faculty->name }}</td>
-                                        <td>{{ $teacher->teacher->department->name }}</td>
-                                        <td>{{ ucfirst($teacher->gender) }}</td>
-                                        <td>{{ ucfirst($teacher->nationality) }}</td>
-                                        <td>{{ $teacher->birth_date }}</td>
-                                        <td>{{ $teacher->national_id }}</td>
-                                        <td>{{ ucfirst($teacher->religion) }}</td>
-                                        <td>
-                                            @role('admin')
-                                            <a href="{{ route('dashboard.teachers.edit', $teacher->teacher->id) }}">
-                                                <button class="btn btn-warning">
-                                                    <i class="fa fa-edit"></i>
-                                                    Edit
-                                                </button>
-                                            </a>
-                                            <form
-                                                action="{{ route('dashboard.teachers.destroy', $teacher->teacher->id) }}"
-                                                method="post" style="display: inline">
-                                                @csrf
-                                                @method('delete')
-                                                <button type="submit" class="btn btn-danger delete">
-                                                    <i class="fa fa-trash"></i>
-                                                    Delete
-                                                </button>
-                                            </form>
-                                            @endrole
-                                        </td>
+                                        <td>{{ $student->student->student_id }}</td>
+                                        <td>{{ $student->name }}</td>
+                                        <td><a href="mailto:{{ $student->email }}"
+                                               style="text-decoration: underline">{{ $student->email }}</a></td>
+                                        <td>{{ $student->mobile }}</td>
+                                        <td>{{ $student->student->department->faculty->name }}</td>
+                                        <td>{{ $student->student->department->name }}</td>
+                                        <td>{{ $student->student->cgpa }}</td>
+                                        <td>{{ ucfirst($student->gender) }}</td>
+                                        <td>{{ ucfirst($student->nationality) }}</td>
+                                        <td>{{ $student->birth_date }}</td>
+                                        <td>{{ $student->national_id }}</td>
+                                        <td>{{ ucfirst($student->religion) }}</td>
                                     </tr>
                                 @endforeach
                                 </tbody>

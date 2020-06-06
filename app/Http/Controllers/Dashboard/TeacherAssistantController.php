@@ -5,12 +5,14 @@ namespace App\Http\Controllers\Dashboard;
 use App\AcademicAdvisor;
 use App\Faculty;
 use App\Http\Controllers\Controller;
+use App\Student;
 use App\TeacherAssistant;
 use App\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -23,7 +25,7 @@ class TeacherAssistantController extends Controller
      */
     public function index()
     {
-        $teacherAssistants = User::whereRoleIs('teacherAssistant')->with('teacherAssistant.department')->get();
+        $teacherAssistants = User::whereRoleIs('teacher_assistant')->with('teacherAssistant.department')->get();
         return view('dashboard.teacher-assistants.index', compact('teacherAssistants'));
     }
 
@@ -60,12 +62,14 @@ class TeacherAssistantController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
         $request['password'] = bcrypt($request->password);
-        $user = User::create($request->all());
-        TeacherAssistant::create([
-            'user_id' => $user->id,
-            'department_id' => $request->department_id,
-        ]);
-        $user->attachRole('teacherAssistant');
+        DB::transaction(function () use ($request) {
+            $user = User::create($request->all());
+            TeacherAssistant::create([
+                'user_id' => $user->id,
+                'department_id' => $request->department_id,
+            ]);
+            $user->attachRole('teacher_assistant');
+        });
         session()->flash('success', 'Teacher Assistant Created Successfully');
         return redirect()->route('dashboard.teacher-assistants.index');
     }
@@ -146,5 +150,31 @@ class TeacherAssistantController extends Controller
         $user->attachRole('academicAdvisor');
         session()->flash('success', 'Request Done Successfully');
         return redirect()->route('dashboard.teacher-assistants.index');
+    }
+
+
+    public function assignStudents(AcademicAdvisor $academicAdvisor)
+    {
+        $students = Student::where('department_id', $academicAdvisor->department_id)
+            ->where('academic_advisor_id', null)
+            ->with('user')
+            ->get();
+        return view('dashboard.teacher-assistants.assign-student-to-acadimic-advisor', compact('students', 'academicAdvisor'));
+    }
+
+    public function assignStudentsSave(Request $request, AcademicAdvisor $academicAdvisor)
+    {
+        $this->validate($request, [
+            'students_ids' => 'required|array',
+            'students_ids.*' => 'required|integer|distinct',
+        ]);
+        foreach ($request->students_ids as $id) {
+            $student = Student::find($id);
+            $student->update([
+                'academic_advisor_id' => $academicAdvisor->id
+            ]);
+        }
+        session()->flash('success', 'Students Assigned Successfully');
+        return redirect()->route('dashboard.teacher-assistants.assignStudents', $academicAdvisor->id);
     }
 }

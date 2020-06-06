@@ -5097,6 +5097,61 @@ table thead .checkbox.radio { margin-top:-7px;margin-top:-21px; }
     margin-left: 6px;
 }
 
-/*.is-invalid {*/
-/*    border-color: ;*/
-/*}*/
+.course-prerequisites {
+    padding: 3px 5px;
+    border: 1px solid #73879C;
+    border-radius: 3px;
+    color: #73879C;
+    margin-bottom: 3px;
+}
+
+.term-status {
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: white;
+}
+
+.term-success {
+    background-color: #5cb85c;
+}
+
+.term-danger {
+    background-color: #c9302c;
+}
+
+.term-primary {
+    background-color: #1ABB9C;
+}
+
+.term-warning {
+    background-color: #f0ad4e;
+    color: black;
+}
+
+.calendar {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.calendar, th, td {
+    border: 1px solid #73879C;
+}
+
+.calendar th {
+    text-align: center;
+    padding: 10px 5px;
+}
+
+.calendar td {
+    padding: 10px;
+    width: 16.666667%;
+}
+
+.calendar td span {
+    display: block;
+    background-color: #3a87ad;
+    color: white;
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+}

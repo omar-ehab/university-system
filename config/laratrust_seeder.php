@@ -4,12 +4,12 @@ return [
     'role_structure' => [
         'admin' => [],
         'teacher' => [],
-        'teacherAssistant' => [],
+        'teacher_assistant' => [],
         'student' => [],
-        'academicAdvisor' => [],
-        'headDepartment' => [],
-        'headFaculty' => [],
-        'headUniversity' => [],
+        'academic_advisor' => [],
+        'head_department' => [],
+        'head_faculty' => [],
+        'head_university' => [],
     ],
     'permissions_map' => [
         'c' => 'create',

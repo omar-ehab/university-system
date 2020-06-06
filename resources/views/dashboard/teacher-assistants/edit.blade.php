@@ -152,7 +152,7 @@
                             <div class="col-xs-12">
                                 <button type="submit" class="btn btn-success">
                                     <i class="fa fa-check"></i>
-                                    Edit Head Department
+                                    Edit Teacher Assistant
                                 </button>
                                 {{--                                <button class="btn btn-primary btn-sm" type="reset">Clear inputs</button>--}}
                             </div>

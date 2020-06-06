@@ -143,7 +143,7 @@
                             <div class="col-xs-12">
                                 <button type="submit" class="btn btn-success">
                                     <i class="fa fa-check"></i>
-                                    Add Teacher
+                                    Add Teacher Assistant
                                 </button>
                             </div>
                         </div>

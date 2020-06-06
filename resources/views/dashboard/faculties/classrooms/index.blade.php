@@ -5,12 +5,12 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="far fa-users" aria-hidden="true"></i> Teachers
+                    <i class="far fa-university" aria-hidden="true"></i> Classrooms
 
                 </h2>
                 <div class="clearfix"></div>
                 @role('admin')
-                <a href="{{ route('dashboard.teachers.create') }}">
+                <a href="{{ route('dashboard.faculties.classrooms.create', $faculty->id) }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
                 @endrole
@@ -25,47 +25,20 @@
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
-                                        colspan="1" aria-sort="ascending">#
-                                    </th>
-                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
-                                        colspan="1" aria-sort="ascending"
-                                        aria-label="Name: activate to sort column descending">Name
+                                        colspan="1" aria-sort="ascending" style="width: 50px">#
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending">
-                                        Email
+                                        aria-label="Code: activate to sort column ascending" style="width: 50px;">
+                                        Code
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending">
-                                        Mobile
+                                        aria-label="Code: activate to sort column ascending" style="width: 250px;">
+                                        Capacity
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Faculty
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Department
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Classrooms Count: activate to sort column ascending">
-                                        Gender
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Nationality
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Birth date
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        National Id
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending">
-                                        Religion
+                                        aria-label="Departments Count: activate to sort column ascending"
+                                        style="width: 70px;">
+                                        Floor
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
@@ -73,30 +46,21 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($teachers as $index => $teacher)
+                                @foreach($classrooms as $index => $classroom)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $teacher->name }}</td>
-                                        <td><a href="mailto:{{ $teacher->email }}"
-                                               style="text-decoration: underline">{{ $teacher->email }}</a></td>
-                                        <td>{{ $teacher->mobile }}</td>
-                                        <td>{{ $teacher->teacher->department->faculty->name }}</td>
-                                        <td>{{ $teacher->teacher->department->name }}</td>
-                                        <td>{{ ucfirst($teacher->gender) }}</td>
-                                        <td>{{ ucfirst($teacher->nationality) }}</td>
-                                        <td>{{ $teacher->birth_date }}</td>
-                                        <td>{{ $teacher->national_id }}</td>
-                                        <td>{{ ucfirst($teacher->religion) }}</td>
+                                        <td>{{ $classroom->code }}</td>
+                                        <td>{{ $classroom->capacity }}</td>
+                                        <td>{{ $classroom->floor }}</td>
                                         <td>
-                                            @role('admin')
-                                            <a href="{{ route('dashboard.teachers.edit', $teacher->teacher->id) }}">
+                                            <a href="{{ route('dashboard.faculties.classrooms.edit', [$faculty->id, $classroom->id]) }}">
                                                 <button class="btn btn-warning">
                                                     <i class="fa fa-edit"></i>
                                                     Edit
                                                 </button>
                                             </a>
                                             <form
-                                                action="{{ route('dashboard.teachers.destroy', $teacher->teacher->id) }}"
+                                                action="{{ route('dashboard.faculties.classrooms.destroy', [$faculty->id, $classroom->id]) }}"
                                                 method="post" style="display: inline">
                                                 @csrf
                                                 @method('delete')
@@ -105,7 +69,6 @@
                                                     Delete
                                                 </button>
                                             </form>
-                                            @endrole
                                         </td>
                                     </tr>
                                 @endforeach

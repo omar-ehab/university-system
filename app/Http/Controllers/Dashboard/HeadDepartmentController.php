@@ -2,130 +2,56 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Faculty;
-use App\HeadDepartment;
+use App\Course;
+use App\Department;
 use App\Http\Controllers\Controller;
+use App\Student;
+use App\Term;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\ValidationException;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\DB;
 
 class HeadDepartmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function index()
+    public function teachers(Department $department)
     {
-        $heads = User::whereRoleIs('headDepartment')->with('headDepartment.department')->get();
-        return view('dashboard.teachers.index', compact('heads'));
+        $teachers = User::whereRoleIs('teacher')->where('id', '!=', auth()->user()->id)->with('teacher.department')->get();
+        $teachers = $teachers->filter(function ($teacher) use ($department) {
+            return $teacher->teacher->department_id == $department->id && !$teacher->hasRole('head_faculty');
+        });
+
+        return view('dashboard.teachers.index', compact('teachers'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function create()
+    public function teacherAssistants(Department $department)
     {
-        $faculties = Faculty::all();
-        return view('dashboard.teachers.create', compact('faculties'));
+        $teacherAssistants = User::whereRoleIs('teacher_assistant')->with('teacherAssistant.department')->get();
+        $teacherAssistants = $teacherAssistants->filter(function ($assistant) use ($department) {
+            return $assistant->teacherAssistant->department_id == $department->id;
+        });
+        return view('dashboard.teacher-assistants.index', compact('teacherAssistants'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     * @return RedirectResponse
-     * @throws ValidationException
-     */
-    public function store(Request $request)
+    public function students(Department $department)
     {
-        $this->validate($request, [
-            'department_id' => 'required',
-            'name' => 'required',
-            'email' => 'required|email|max:255|unique:users',
-            'gender' => 'required|in:male,female',
-            'mobile' => 'required|digits:11',
-            'nationality' => 'required',
-            'birth_date' => 'required|date_format:Y-m-d',
-            'national_id' => 'required|digits:14',
-            'religion' => 'required',
-            'password' => 'required|min:6|confirmed',
-        ]);
-        $request->password = bcrypt($request->password);
-        $user = User::create($request->all());
-        HeadDepartment::create([
-            'user_id' => $user->id,
-            'department_id' => $request->department_id,
-        ]);
-        $user->attachRole('headDepartment');
-        session()->flash('success', 'Head Department Created Successfully');
-        return redirect()->route('dashboard.head_departments.index');
+        $students = Student::where('department_id', $department->id)->with('user')->get();
+        return view('dashboard.students.index', compact('students'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return Application|Factory|View
-     */
-    public function edit($id)
+    public function courses(Department $department)
     {
-        $faculties = Faculty::all();
-        $head = HeadDepartment::with('user', 'department')->where('id', $id)->firstOrFail();
-        return view('dashboard.teachers.edit', compact('faculties', 'head'));
+        $courses = Course::where('department_id', $department->id)->withCount('prerequisites', 'students')->get();
+        return view('dashboard.courses.index', compact('courses'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param int $id
-     * @return RedirectResponse
-     * @throws ValidationException
-     */
-    public function update(Request $request, $id)
+    public function calender(Request $request, Department $department)
     {
-        $head = HeadDepartment::with('user')->where('id', $id)->firstOrFail();
-        $this->validate($request, [
-            'department_id' => 'required',
-            'name' => 'required',
-            'email' => 'required|max:255|unique:users,email,' . $head->user->id,
-            'gender' => 'required|in:male,female',
-            'mobile' => 'required|digits:11',
-            'nationality' => 'required',
-            'birth_date' => 'required|date_format:Y-m-d',
-            'national_id' => 'required|digits:14',
-            'religion' => 'required',
-        ]);
-        $head->user->update($request->all());
-        session()->flash('success', 'Head Department Updated Successfully');
-        return redirect()->route('dashboard.head_departments.index');
-    }
+        $terms = Term::orderBy('created_at')->get();
+        $term_id = $request->term_id ? $request->term_id : $terms->first()->id;
+        $data = DB::table('course_classroom')
+            ->where('term_id', $term_id)
+            ->get();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return RedirectResponse
-     */
-    public function destroy($id)
-    {
-        try {
-            $head = HeadDepartment::with('user')->where('id', $id)->firstOrFail();
-            $user = $head->user;
-            $head->delete();
-            $user->delete();
-            session()->flash('success', 'Head Department Deleted Successfully');
-        } catch (\Exception $e) {
-            session()->flash('error', 'Something went wrong please try again later');
-        }
-        return redirect()->route('dashboard.head_departments.index');
+        return view('dashboard.head_department_week_calender', compact('terms', 'data'));
     }
 }
