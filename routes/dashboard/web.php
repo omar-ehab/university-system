@@ -51,6 +51,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::get('/{teacher}/alerts', 'TeacherController@alerts')->name('teacher.alerts');
         Route::get('/{teacher}/alerts/{alert}/approve', 'TeacherController@approve_alert')->name('teacher.approve_alert');
         Route::get('/{teacher}/alerts/{alert}/disprove', 'TeacherController@disprove_alert')->name('teacher.disprove_alert');
+        Route::get('teacher/{teacher}/calender/', 'TeacherController@calender')->name('teacher.calender');
 
     });
 

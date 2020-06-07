@@ -192,9 +192,7 @@ class TeacherAssistantController extends Controller
             ->whereIn('id', $classroomIds)
             ->where('term_id', $currentTerm->id)
             ->get();
-
         return view('dashboard.head_department_week_calender', compact('data'));
-
     }
 
 

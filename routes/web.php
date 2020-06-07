@@ -17,4 +17,39 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes(['register' => false]);
 
-Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', function () {
+    return view('index');
+})->name('home');
+
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/courses', function () {
+    return view('courses');
+})->name('courses');
+
+Route::get('/events', function () {
+    return view('events');
+})->name('events');
+
+Route::get('/news', function () {
+    return view('news');
+})->name('news');
+
+Route::get('/alumni', function () {
+    return view('alumni');
+})->name('alumni');
+
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
+
+Route::get('/single-post', function () {
+    return view('single-post');
+})->name('single-post');
+
+Route::get('/single-event', function () {
+    return view('single-event');
+})->name('single-event');
+

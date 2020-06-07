@@ -1,8 +1,10 @@
 <div class="col-md-3 left_col">
     <div class="left_col scroll-view">
         <div class="navbar nav_title" style="border: 0;">
-            <a href="/" class="site_title"><img src="{{asset('images/logo.png')}}" alt="pua logo" class="sideNav-logo">
-                <span>PUA system</span></a>
+            <a href="{{ route('dashboard.home') }}" class="site_title">
+                <img src="{{asset('images/logo.png')}}" alt="pua logo" class="sideNav-logo">
+                <span>PUA system</span>
+            </a>
         </div>
 
         <div class="clearfix"></div>
@@ -100,6 +102,12 @@
                         <a href="{{ route('dashboard.teacher.alerts', auth()->user()->teacher->id) }}">
                             <i class="fa fa-bell" aria-hidden="true"></i>
                             Students Alerts
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.teacher.calender', auth()->user()->teacher->id) }}">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            Term Schedule
                         </a>
                     </li>
                     @endrole

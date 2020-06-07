@@ -188,4 +188,17 @@ class TeacherController extends Controller
         session()->flash('success', 'Alert Disproved Successfully and has been deleted');
         return redirect()->back();
     }
+
+    public function calender(Teacher $teacher)
+    {
+        $classroomIds = $teacher->courses->map(function ($course) {
+            return $course->pivot->course_classroom_id;
+        });
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+        $data = DB::table('course_classroom')
+            ->whereIn('id', $classroomIds)
+            ->where('term_id', $currentTerm->id)
+            ->get();
+        return view('dashboard.head_department_week_calender', compact('data'));
+    }
 }
