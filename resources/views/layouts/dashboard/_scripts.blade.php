@@ -4,6 +4,8 @@
 <script src="{{ asset('vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 <!-- FastClick -->
 <script src="{{ asset('vendors/fastclick/lib/fastclick.js') }}"></script>
+<!-- Noty js -->
+<script src="{{ asset('vendors/noty/noty.min.js') }}"></script>
 <!-- NProgress -->
 <script src="{{ asset('vendors/nprogress/nprogress.js') }}"></script>
 <!-- Chart.js -->
@@ -40,6 +42,38 @@
 <script src="{{ asset('vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
 <!-- Custom Theme Scripts -->
-<script src="{{ asset('js/helpers/smartresize.js') }}"></script>
 <script src="{{ asset('js/custom.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+        //delete
+        $('.delete').click(function (e) {
+
+            let that = $(this);
+
+            e.preventDefault();
+
+            let n = new Noty({
+                text: "Are you sure you want to delete this data?",
+                type: "warning",
+                killer: true,
+                buttons: [
+                    Noty.button("Yes", 'btn btn-success mr-2', function () {
+                        that.closest('form').submit();
+                    }),
+
+                    Noty.button("NO", 'btn btn-primary mr-2', function () {
+                        n.close();
+                    }),
+                ]
+            });
+            n.show();
+        })
+    });//end of delete
+
+    if (window.innerWidth < 768) {
+        $('.main-container').removeClass('sbar-open');
+    }
+</script>
+
 

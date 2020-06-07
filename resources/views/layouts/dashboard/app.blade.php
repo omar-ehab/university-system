@@ -3,6 +3,7 @@
 <!-- head navigation -->
 @include('layouts.dashboard._head')
 <title>@yield('title')</title>
+@stack('styles')
 <!-- /head navigation -->
 <body class="nav-md">
 <div class="container body">
@@ -23,10 +24,6 @@
         </div>
         <!-- /page content -->
 
-        <!-- session messages -->
-    @include('partials._session')
-    <!-- /session messages -->
-
         <!-- footer content -->
     @include('layouts.dashboard._footer')
     <!-- /footer content -->
@@ -35,7 +32,11 @@
 
 <!-- scripts content -->
 @include('layouts.dashboard._scripts')
+@stack('scripts')
 <!-- /scripts content -->
+<!-- session messages -->
+@include('partials._session')
+<!-- /session messages -->
 </body>
 </html>
 

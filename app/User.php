@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
@@ -18,7 +17,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'mobile', 'gender', 'nationality', 'birth_date', 'national_id', 'religion'
     ];
 
     /**
@@ -38,4 +37,45 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class);
+    }
+
+    public function admin()
+    {
+        return $this->hasOne(Admin::class);
+    }
+
+    public function teacherAssistant()
+    {
+        return $this->hasOne(TeacherAssistant::class);
+    }
+
+    public function headDepartment()
+    {
+        return $this->hasOne(HeadDepartment::class);
+    }
+
+    public function headFaculty()
+    {
+        return $this->hasOne(HeadFaculty::class);
+    }
+
+    public function headUniversity()
+    {
+        return $this->hasOne(HeadUniversity::class);
+    }
+
+    public function academicAdvisor()
+    {
+        return $this->hasOne(AcademicAdvisor::class);
+    }
+
 }

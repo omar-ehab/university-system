@@ -2231,7 +2231,7 @@ window.obama_budget_2012 = [
                     6000,
                     0
                 ],
-                "name": "advisery Council on Historic Preservation",
+                "name": "Advisory Council on Historic Preservation",
                 "id": "leaf-406",
                 "discretion": "discretionary"
             },
