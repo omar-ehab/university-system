@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Faculty;
+use App\Alert;
+use App\Course;
 use App\Http\Controllers\Controller;
+use App\pending_courses;
 use App\Student;
 use App\User;
+use DB;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -21,10 +23,146 @@ class StudentController extends Controller
      *
      * @return Application|Factory|View
      */
+
+    //  ours afnaaaan rewaaaaan
     public function index()
     {
-        $students = User::whereRoleIs('student')->with('student.department')->get();
-        return view('dashboard.students.index', compact('students'));
+        return view('dashboard.student.studentHome');
+    }
+
+    public function showProfile(int $id)
+    {
+        // $article= Article::findOrFail($id);
+        $user = User::findOrFail($id);
+        //   $student=Student::findOrFail($id);
+        // dd($student);
+        $student = $user->student;
+        // return view('dashboard.student.profile',['user'=>$user]);
+        return view('dashboard.student.profile', ['student' => $student]);
+
+    }
+
+    public function showCourses(int $id)
+    {
+        $user = User::findOrFail($id);
+        $student = $user->student;
+        $course = $student->course;
+        $collection = new collection();
+        foreach ($course as $course) {
+            if ($course->pivot->isPaid) {
+                $collection->push($course);
+            }
+        }
+
+        return view('dashboard.student.myCourses', ['collection' => $collection]);
+    }
+
+    public function registerCourses()
+    {
+        $student = auth()->user()->student;
+        $student_courses = $student->course_student->where('passed', 1);
+
+        $student_department = $student->department;
+        $department_courses = $student_department->courses;
+        $collection = new collection();
+        foreach ($student_courses as $student_course) {
+
+            $course = $student_course->course;
+            $collection->push($course);
+        }
+        $neededCourses = $department_courses->diff($collection);
+        return view('dashboard.student.registerCourses', compact('neededCourses'));
+    }
+
+    public function addCourse(int $id)
+    {
+        $student = Auth::user()->student;
+        $student_courses = $student->course;
+        $pres = Course::find($id)->course_prerequisites;
+        $collection = new collection();
+        $flag = 0;
+        foreach ($pres as $pre) {
+            $course_pre = Course::findOrFail($pre->prerequisite_id);
+            $collection->push($course_pre);
+        }
+        $inters = $student_courses->intersect($collection);
+        foreach ($inters as $inter) {
+            $flag = 0;
+            if ($inter->pivot->passed == 0) {
+                $flag = 1;
+                break;
+            }
+
+        }
+
+        if ($flag == 1) {
+            return view('dashboard.student.courseConflict');
+        } else {
+            $theCourse = Course::find($id);
+            $pending_request = new pending_courses();
+            $pending_request->course_id = $id;
+            $pending_request->student_id = $student->id;
+            $pending_request->term_id = 1;//hna mfrood al term ally opened by IT member
+            $pending_request->save();
+
+            return view('dashboard.student.requestIsPending');
+        }
+
+
+    }
+
+    public function showCourseMaterial(int $id)
+    {
+        $material = Course::find($id)->material;
+        return view('dashboard.student.courseMaterial', ['material' => $material]);
+    }
+
+
+    public function showAlerts(int $id)
+    {
+        $user = User::findOrFail($id);
+        $student = $user->student;
+
+        $alert = $student->alert;
+
+        return view('dashboard.student.alerts', ['alert' => $alert]);
+
+    }
+
+    public function showAlertData(int $id)
+    {
+        $alert = Alert::findOrFail($id);
+
+        return view('dashboard.student.alertData', ['alert' => $alert]);
+
+    }
+
+    public function showTranscript(int $id)
+    {
+        $user = User::findOrFail($id);
+        $student = $user->student;
+
+        $student_course = $student->course_student;
+
+        return view('dashboard.student.transcript', compact('student_course'));
+
+    }
+
+
+    public function showTermTranscript(int $id)
+    {
+
+        $user = Auth::user();
+        $student = $user->student;
+
+        $student_term_courses = $student->course_student->where('term_id', $id);
+        return view('dashboard.student.thisTermTranscript', compact('student_term_courses'));
+    }
+
+
+    public function payOnline()
+    {
+        return view('dashboard.student.payment');
     }
 
     /**

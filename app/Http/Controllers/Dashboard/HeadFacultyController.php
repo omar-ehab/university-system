@@ -128,4 +128,8 @@ class HeadFacultyController extends Controller
         }
         return redirect()->route('dashboard.faculty_deans.index');
     }
+
+
+    
+
 }

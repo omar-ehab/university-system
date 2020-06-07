@@ -18,6 +18,7 @@ class HomeController extends Controller
 {
     public function index()
     {
+
         if (auth()->user()->hasRole('admin')) {
             return $this->adminPage();
         } elseif (auth()->user()->hasRole('head_department')) {
@@ -26,14 +27,15 @@ class HomeController extends Controller
             return $this->teacherPage();
         } elseif (auth()->user()->hasRole('teacher_assistant')) {
             return $this->teacherAssistantPage();
+        } elseif (auth()->user()->hasRole('student')) {
+            return view('dashboard.student.studentHome');
+        } elseif (auth()->user()->hasRole('academicAdvisor')) {
+            return view('dashboard.academicAdvisor.academicAdvisorHome');
+        } elseif (auth()->user()->hasRole('headFaculty')) {
+            return view('dashboard.headFaculty.headFacultyHome');
+        } elseif (auth()->user()->hasRole('headUniversity')) {
+            return view('dashboard.headUniversity.headUniversityHome');
         }
-
-        // .
-        // .
-        // .
-        // and so on ...
-
-//        return view('dashboard.index');
     }
 
     private function adminPage()
