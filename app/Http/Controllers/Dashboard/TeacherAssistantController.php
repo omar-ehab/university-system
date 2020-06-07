@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\AcademicAdvisor;
+use App\Course;
 use App\Faculty;
 use App\Http\Controllers\Controller;
-use App\Student;
 use App\TeacherAssistant;
+use App\Term;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -153,28 +155,47 @@ class TeacherAssistantController extends Controller
     }
 
 
-    public function assignStudents(AcademicAdvisor $academicAdvisor)
+    public function courses(TeacherAssistant $teacherAssistant)
     {
-        $students = Student::where('department_id', $academicAdvisor->department_id)
-            ->where('academic_advisor_id', null)
-            ->with('user')
-            ->get();
-        return view('dashboard.teacher-assistants.assign-student-to-acadimic-advisor', compact('students', 'academicAdvisor'));
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+        if ($currentTerm) {
+            $courses = $teacherAssistant->courses()->withCount('students')->where('term_id', $currentTerm->id)->get();
+            $courses = $courses->filter(function ($course) use ($currentTerm) {
+                return $course->pivot->term_id == $currentTerm->id;
+            });
+            return view('dashboard.teacher-assistants.courses.index', compact('courses', 'teacherAssistant'));
+        }
+        $courses = $teacherAssistant->courses;
+        return view('dashboard.teacher-assistants.courses.index', compact('courses', 'teacherAssistant'));
     }
 
-    public function assignStudentsSave(Request $request, AcademicAdvisor $academicAdvisor)
+    public function myCourse(TeacherAssistant $teacherAssistant, $course)
     {
-        $this->validate($request, [
-            'students_ids' => 'required|array',
-            'students_ids.*' => 'required|integer|distinct',
-        ]);
-        foreach ($request->students_ids as $id) {
-            $student = Student::find($id);
-            $student->update([
-                'academic_advisor_id' => $academicAdvisor->id
-            ]);
-        }
-        session()->flash('success', 'Students Assigned Successfully');
-        return redirect()->route('dashboard.teacher-assistants.assignStudents', $academicAdvisor->id);
+        $course = Course::withCount('students')->where('id', $course)->first();
+        return view('dashboard.teacher-assistants.courses.show', compact('course', 'teacherAssistant'));
     }
+
+    public function courseStudents($teacherAssistant, Course $course)
+    {
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+        $students = $course->students()->with('user')->where('term_id', $currentTerm->id)->get();
+        return view('dashboard.teacher-assistants.courses.students.index', compact('students', 'teacherAssistant'));
+    }
+
+    public function calender(TeacherAssistant $teacherAssistant)
+    {
+        $classroomIds = $teacherAssistant->courses->map(function ($course) {
+            return $course->pivot->course_classroom_id;
+        });
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+        $data = DB::table('course_classroom')
+            ->whereIn('id', $classroomIds)
+            ->where('term_id', $currentTerm->id)
+            ->get();
+
+        return view('dashboard.head_department_week_calender', compact('data'));
+
+    }
+
+
 }

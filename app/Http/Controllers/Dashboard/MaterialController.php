@@ -67,7 +67,8 @@ class MaterialController extends Controller
             'course_id' => $course,
             'term_id' => $currentTerm->id,
             'name' => $originalName,
-            'path' => $name
+            'path' => $name,
+            'user_id' => auth()->user()->id
         ]);
         session()->flash('success', 'Materials Added Successfully');
         return redirect()->route('dashboard.materials.index', $course);
@@ -101,9 +102,14 @@ class MaterialController extends Controller
      */
     public function destroy($course, Material $material)
     {
-        Storage::disk('public')->delete($material->path);
-        $material->delete();
-        session()->flash('success', 'Materials Deleted Successfully');
-        return redirect()->route('dashboard.materials.index', $course);
+        if (auth()->user()->id == $material->user_id) {
+            Storage::disk('public')->delete($material->path);
+            $material->delete();
+            session()->flash('success', 'Materials Deleted Successfully');
+            return redirect()->route('dashboard.materials.index', $course);
+        } else {
+            session()->flash('error', 'You must own this material to Delete it');
+            return redirect()->route('dashboard.materials.index', $course);
+        }
     }
 }

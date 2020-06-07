@@ -9,7 +9,7 @@
 
                 </h2>
                 <div class="clearfix"></div>
-                @role('teacher')
+                @role(['teacher', 'teacher_assistant'])
                 <a href="{{ route('dashboard.materials.create', $course->id) }}">
                     <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
                 </a>
@@ -70,17 +70,24 @@
                                                     Download
                                                 </button>
                                             </a>
-                                            @role('teacher')
-                                            <form
-                                                action="{{ route('dashboard.materials.destroy', [$course->id, $material->id]) }}"
-                                                method="post" style="display: inline">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="btn btn-danger delete">
+                                            @role(['teacher', 'teacher_assistant'])
+                                            @if(auth()->user()->id == $material->user_id)
+                                                <form
+                                                    action="{{ route('dashboard.materials.destroy', [$course->id, $material->id]) }}"
+                                                    method="post" style="display: inline">
+                                                    @csrf
+                                                    @method('delete')
+                                                    <button class="btn btn-danger delete">
+                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @else
+                                                <button class="btn btn-danger disabled">
                                                     <i class="fa fa-trash" aria-hidden="true"></i>
                                                     Delete
                                                 </button>
-                                            </form>
+                                            @endif
                                             @endrole
                                         </td>
                                     </tr>

@@ -64,7 +64,7 @@
                                         <td>{{ $course->students_count }}</td>
                                         <td>{{ $course->prerequisites_count }}</td>
                                         <td>
-                                            <a href="{{ route('dashboard.teacher.course', $course->id) }}">
+                                            <a href="{{ route('dashboard.courses.show', $course->id) }}">
                                                 <button class="btn btn-primary">
                                                     <i class="fa fa-eye"></i>
                                                     Show

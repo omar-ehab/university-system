@@ -103,6 +103,20 @@
                         </a>
                     </li>
                     @endrole
+                    @role('teacher_assistant')
+                    <li>
+                        <a href="{{ route('dashboard.teacher_assistants.courses', auth()->user()->teacherAssistant->id) }}">
+                            <i class="fa fa-book" aria-hidden="true"></i>
+                            Courses
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.teacher_assistants.calender', auth()->user()->teacherAssistant->id) }}">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            Term Schedule
+                        </a>
+                    </li>
+                    @endrole
                 </ul>
             </div>
         </div>

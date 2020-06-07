@@ -162,7 +162,7 @@ class TeacherController extends Controller
     public function courseStudents($teacher, Course $course)
     {
         $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
-        $students = $course->students()->where('term_id', $currentTerm->id)->get();
+        $students = $course->students()->with('user')->where('term_id', $currentTerm->id)->get();
         return view('dashboard.teachers.courses.students.index', compact('students', 'teacher'));
     }
 
@@ -170,7 +170,7 @@ class TeacherController extends Controller
     {
         $ids = $teacher->courses->pluck('id');
         $alerts = Alert::whereIn('course_id', $ids)->with('student', 'course')->orderBy('created_at')->get();
-        return view('dashboard.alerts.index', compact('alerts'));
+        return view('dashboard.alerts.index', compact('alerts', 'teacher'));
     }
 
     public function approve_alert($teacher, Alert $alert)

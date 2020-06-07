@@ -17,4 +17,9 @@ class TeacherAssistant extends Model
     {
         return $this->belongsTo(Department::class);
     }
+
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'course_teacher_assistant')->withPivot('term_id', 'course_classroom_id');
+    }
 }

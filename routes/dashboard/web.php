@@ -43,6 +43,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::post('teacher-assistants/academic-advisor/{academicAdvisor}/assignStudentsSave', 'TeacherAssistantController@assignStudentsSave')->name('teacher-assistants.assignStudentsSave');
     });
 
+    //routes of teacher
     Route::middleware('role:teacher')->group(function () {
         Route::get('/{teacher}/my-courses', 'TeacherController@myCourses')->name('teacher.my-courses');
         Route::get('/{teacher}/course/{course}', 'TeacherController@myCourse')->name('teacher.course');
@@ -51,12 +52,23 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::get('/{teacher}/alerts/{alert}/approve', 'TeacherController@approve_alert')->name('teacher.approve_alert');
         Route::get('/{teacher}/alerts/{alert}/disprove', 'TeacherController@disprove_alert')->name('teacher.disprove_alert');
 
+    });
+
+    //routes of teacher assistant
+    Route::middleware('role:teacher_assistant')->group(function () {
+        Route::get('teacher_assistants/{teacherAssistant}/courses', 'TeacherAssistantController@courses')->name('teacher_assistants.courses');
+        Route::get('teacher_assistants/{teacherAssistant}/course/{course}', 'TeacherAssistantController@myCourse')->name('teacher_assistants.course');
+        Route::get('teacher_assistants/{teacherAssistant}/course/{course}/students', 'TeacherAssistantController@courseStudents')->name('teacher_assistants.courseStudents');
+        Route::get('teacher_assistants/{teacherAssistant}/calender/', 'TeacherAssistantController@calender')->name('teacher_assistants.calender');
+    });
+    Route::middleware(['role:teacher|teacher_assistant'])->group(function () {
         Route::get('materials/{course}', 'MaterialController@index')->name('materials.index');
-        Route::get('materials/{course}/create', 'MaterialController@create')->middleware('role:teacher')->name('materials.create');
-        Route::post('materials/{course}', 'MaterialController@store')->middleware('role:teacher')->name('materials.store');
+        Route::get('materials/{course}/create', 'MaterialController@create')->middleware('role:teacher|teacher_assistant')->name('materials.create');
+        Route::post('materials/{course}', 'MaterialController@store')->middleware('role:teacher|teacher_assistant')->name('materials.store');
         Route::get('materials/{course}/material/{material}/download', 'MaterialController@download')->name('materials.download');
         Route::delete('materials/{course}/material/{material}/destroy', 'MaterialController@destroy')->name('materials.destroy');
     });
+
 
     //routes of students
     Route::middleware('role:student')->group(function () {

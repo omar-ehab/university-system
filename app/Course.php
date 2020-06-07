@@ -30,7 +30,7 @@ class Course extends Model
 
     public function teacherAssistants()
     {
-        return $this->belongsToMany(TeacherAssistant::class, 'course_teacher_assistant')->withPivot('term_id');
+        return $this->belongsToMany(TeacherAssistant::class, 'course_teacher_assistant')->withPivot('term_id', 'course_classroom_id');
     }
 
     public function classrooms()

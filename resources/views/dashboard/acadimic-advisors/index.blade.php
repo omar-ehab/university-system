@@ -5,8 +5,7 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2>
-                    <i class="fa fa-bell" aria-hidden="true"></i> Alerts
-
+                    <i class="far fa-users" aria-hidden="true"></i> Students
                 </h2>
                 <div class="clearfix"></div>
             </div>
@@ -20,50 +19,85 @@
                                 <thead>
                                 <tr role="row">
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
-                                        colspan="1" aria-sort="ascending" style="width: 50px">#
+                                        colspan="1" aria-sort="ascending">#
                                     </th>
                                     <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
                                         colspan="1" aria-sort="ascending"
-                                        aria-label="Name: activate to sort column descending" style="width: 100px">
-                                        Student Name
+                                        aria-label="Name: activate to sort column descending">ID
+                                    </th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
+                                        aria-label="Name: activate to sort column descending">Name
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending" style="width: 100px">
-                                        Course Name
+                                        aria-label="Code: activate to sort column ascending">
+                                        Email
                                     </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Code: activate to sort column ascending" style="width: 100px">
-                                        Publish Date
+                                        aria-label="Code: activate to sort column ascending">
+                                        Mobile
                                     </th>
-
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        Faculty
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        Department
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        CGPA
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Classrooms Count: activate to sort column ascending">
+                                        Gender
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Nationality
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Birth date
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        National Id
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Religion
+                                    </th>
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach($alerts as $index => $alert)
-
+                                @foreach($students as $index => $student)
                                     <tr role="row" class="odd">
                                         <td>{{ $index + 1 }}</td>
-                                        <td>{{ $alert->student->user->name }}</td>
-                                        <td>{{ $alert->course->name }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($alert->publish_date)->format('Y/m/d') }}</td>
+                                        <td>{{ $student->student_id }}</td>
+                                        <td>{{ $student->user->name }}</td>
+                                        <td><a href="mailto:{{ $student->user->email }}"
+                                               style="text-decoration: underline">{{ $student->user->email }}</a></td>
+                                        <td>{{ $student->user->mobile }}</td>
+                                        <td>{{ $student->department->faculty->name }}</td>
+                                        <td>{{ $student->department->name }}</td>
+                                        <td>{{ $student->cgpa }}</td>
+                                        <td>{{ ucfirst($student->user->gender) }}</td>
+                                        <td>{{ ucfirst($student->user->nationality) }}</td>
+                                        <td>{{ $student->user->birth_date }}</td>
+                                        <td>{{ $student->user->national_id }}</td>
+                                        <td>{{ ucfirst($student->user->religion) }}</td>
                                         <td>
-                                            @if(!$alert->published)
-                                                <a href="{{ route('dashboard.teacher.approve_alert', [$teacher->id, $alert->id]) }}">
-                                                    <button class="btn btn-success">
-                                                        <i class="fa fa-check"></i>
-                                                        Approve
-                                                    </button>
-                                                </a>
-                                                <a href="{{ route('dashboard.teacher.disprove_alert', [$teacher->id, $alert->id]) }}">
-                                                    <button class="btn btn-success">
-                                                        <i class="fa fa-trash"></i>
-                                                        Disprove and Delete
-                                                    </button>
-                                                </a>
-                                            @endif
+                                            <a href="{{ route('dashboard.academic_advisor.issueAlert', [$advisor->id, $student->id]) }}">
+                                                <button class="btn btn-danger">
+                                                    <i class="fa fa-bell" aria-hidden="true"></i>
+                                                    Issue Alert
+                                                </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

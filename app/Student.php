@@ -28,4 +28,9 @@ class Student extends Model
         return $this->hasMany(Alert::class);
     }
 
+    public function courses()
+    {
+        return $this->belongsToMany(Course::class, 'student_course')->withPivot('term_id', 'passed', 'cgpa');
+    }
+
 }

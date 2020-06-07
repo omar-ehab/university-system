@@ -130,7 +130,7 @@ class CourseController extends Controller
             'Wednesday',
             'Thursday'
         ];
-        $terms = Term::where('start', '>=', now())->get();
+        $terms = Term::where('start', '<=', now())->get();
         $classrooms = Classroom::where('faculty_id', $course->department->faculty_id)->get();
         $teachers = Teacher::where('department_id', auth()->user()->headDepartment->department_id)->get();
 
@@ -175,7 +175,7 @@ class CourseController extends Controller
             'Wednesday',
             'Thursday'
         ];
-        $terms = Term::where('start', '>=', now())->get();
+        $terms = Term::where('start', '<=', now())->get();
         $classrooms = Classroom::where('faculty_id', $course->department->faculty_id)->get();
         $teacherAssistants = TeacherAssistant::where('department_id', auth()->user()->headDepartment->department_id)->get();
         return view('dashboard.courses.assign_teacher_assistant', compact('teacherAssistants', 'course', 'terms', 'classrooms', 'weekDays'));
@@ -195,12 +195,13 @@ class CourseController extends Controller
         $classAvailable = $this->checkClassroomAvailability($request);
         if ($classAvailable) {
             DB::transaction(function () use ($request, $course) {
-                $course->teacherAssistants()->attach($request->teacher_assistant_id, ['term_id' => $request->term_id]);
                 $course->classrooms()->attach($request->classroom_id, ['term_id' => $request->term_id,
                     'day_number' => $request->day_number,
                     'from_time' => $request->from,
                     'to_time' => $request->to
                 ]);
+                $id = DB::table('course_classroom')->latest('id')->first()->id;
+                $course->teacherAssistants()->attach($request->teacher_assistant_ids, ['term_id' => $request->term_id, 'course_classroom_id' => $id]);
             });
             session()->flash('success', 'Teacher Assistant Assigned to Course Successfully');
         } else {
