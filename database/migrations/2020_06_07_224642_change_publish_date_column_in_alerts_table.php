@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsPaidToCourseStudentsTable extends Migration
+class ChangePublishDateColumnInAlertsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddIsPaidToCourseStudentsTable extends Migration
      */
     public function up()
     {
-        Schema::table('course_students', function (Blueprint $table) {
-
-            $table->boolean('isPaid')->default(0);
+        Schema::table('alerts', function (Blueprint $table) {
+            $table->dateTime('publish_date')->change();
         });
     }
 
@@ -26,9 +25,8 @@ class AddIsPaidToCourseStudentsTable extends Migration
      */
     public function down()
     {
-        Schema::table('course_students', function (Blueprint $table) {
-            $table->dropColumn('isPaid');
-
+        Schema::table('alerts', function (Blueprint $table) {
+            //
         });
     }
 }

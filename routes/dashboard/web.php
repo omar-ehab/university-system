@@ -94,7 +94,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     });
 
 
-    Route::middleware('role:academicAdvisor')->group(function () {
+    Route::middleware('role:academic_advisor')->group(function () {
 
         //academic advisor routes here
         Route::get('academicAdvisor', 'AcadimicAdvisorController@index')->name('academicAdvisor.index');
@@ -112,7 +112,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     });
 
 
-    Route::middleware('role:headFaculty')->group(function () {
+    Route::middleware('role:head_faculty')->group(function () {
 
         //Head Faculty area
         Route::get('headFaculty', 'HeadFaculty2Controller@index')->name('headFaculty.index');
@@ -123,7 +123,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
 
     });
 
-    Route::middleware('role:headUniversity')->group(function () {
+    Route::middleware('role:head_university')->group(function () {
 
         //Head Faculty area
         Route::get('headUniversity', 'headUniversityController@index')->name('headUniversity.index');
