@@ -4,10 +4,8 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Alert extends Model
+class course_student extends Model
 {
-    
-      
     public function student()
     {
         return $this->belongsTo(Student::class);
@@ -18,4 +16,8 @@ class Alert extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function term()
+    {
+        return $this->belongsTo(Term::class);
+    }
 }

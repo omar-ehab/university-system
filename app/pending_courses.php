@@ -4,10 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Alert extends Model
+class pending_courses extends Model
 {
-    
-      
+
     public function student()
     {
         return $this->belongsTo(Student::class);

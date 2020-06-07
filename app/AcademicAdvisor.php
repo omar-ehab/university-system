@@ -20,6 +20,6 @@ class AcademicAdvisor extends Model
 
     public function student()
     {
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Student::class)->with('user');
     }
 }

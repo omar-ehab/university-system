@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
+
 
 class HomeController extends Controller
 {
@@ -11,12 +13,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        //if(auth()->user()->hasRole('Student'))
-       // {
-          //  return view('dashboard.student-index');
-
-     //   }
-//else
+   
        return view('home');
     }
 }

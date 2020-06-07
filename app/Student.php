@@ -23,4 +23,29 @@ class Student extends Model
         return $this->belongsTo(AcademicAdvisor::class);
     }
 
+    public function course()
+    {
+        return $this->belongsToMany(Course::class, 'course_students')->withPivot('term_id', 'passed', 'cgpa','isPaid');
+    }
+    
+    public function term()
+    {
+        return $this->belongsToMany(Term::class);
+    }
+
+    
+    public function alert()
+    {
+        return $this->hasMany(Alert::class);
+    }
+
+    public function pending_courses()
+    {
+        return $this->hasMany(pending_courses::class);
+    }
+
+    public function course_student()
+    {
+        return $this->hasMany(course_student::class);
+    }
 }

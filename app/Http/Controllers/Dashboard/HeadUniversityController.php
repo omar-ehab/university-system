@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Faculty;
+use App\Department;
+use App\Teacher;
+
+use App\HeadFaculty;
+use Illuminate\Support\Facades\Auth;
 
 class HeadUniversityController extends Controller
 {
@@ -14,8 +20,48 @@ class HeadUniversityController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.headUniversity.headUniversityHome');
+
     }
+
+    public function showAllFaculties()
+    {
+        $faculties=Faculty::all();
+
+        return view('dashboard.headUniversity.allFaculties',compact('faculties'));
+
+    }
+    public function viewFacultiesProfessors()
+    {
+        $faculties=Faculty::all();
+
+        return view('dashboard.headUniversity.allFacultiesProfessors',compact('faculties'));
+
+    }
+
+    public function viewThisFacultyProfessors(int $id)
+    {
+        $faculty=Faculty::findOrFail($id);
+        $faculty_departments=$faculty->departments;
+        
+
+        return view('dashboard.headUniversity.thisFacultyProfessors',compact('faculty_departments'));
+
+    }
+    public function viewThisProfessorData(int $id)
+    {
+        $professor=Teacher::findOrFail($id);
+        $professor_user=$professor->user;
+        
+        return view('dashboard.headUniversity.thisProfessorData',compact('professor_user'));
+
+    }
+
+
+    
+
+
+    
 
     /**
      * Show the form for creating a new resource.
