@@ -23,18 +23,18 @@ class HomeController extends Controller
             return $this->adminPage();
         } elseif (auth()->user()->hasRole('head_department')) {
             return $this->headDepartmentPage();
-        } elseif (auth()->user()->hasRole('teacher')) {
-            return $this->teacherPage();
-        } elseif (auth()->user()->hasRole('teacher_assistant')) {
-            return $this->teacherAssistantPage();
-        } elseif (auth()->user()->hasRole('student')) {
-            return view('dashboard.studentHome');
-        } elseif (auth()->user()->hasRole('academic_advisor')) {
-            return view('dashboard.academicAdvisorHome');
         } elseif (auth()->user()->hasRole('head_faculty')) {
             return view('dashboard.headFacultyHome');
         } elseif (auth()->user()->hasRole('head_university')) {
             return view('dashboard.headUniversityHome');
+        } elseif (auth()->user()->hasRole('teacher')) {
+            return $this->teacherPage();
+        } elseif (auth()->user()->hasRole('academic_advisor')) {
+            return view('dashboard.academicAdvisorHome');
+        } elseif (auth()->user()->hasRole('teacher_assistant')) {
+            return $this->teacherAssistantPage();
+        } elseif (auth()->user()->hasRole('student')) {
+            return view('dashboard.studentHome');
         }
     }
 
