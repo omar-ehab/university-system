@@ -40,7 +40,7 @@ class Student extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'student_course')->withPivot('term_id', 'passed', 'cgpa');
+        return $this->belongsToMany(Course::class, 'course_students')->withPivot('term_id', 'passed', 'cgpa');
     }
 
     public function pending_courses()

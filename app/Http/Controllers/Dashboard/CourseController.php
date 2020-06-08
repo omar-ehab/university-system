@@ -150,12 +150,13 @@ class CourseController extends Controller
         $classAvailable = $this->checkClassroomAvailability($request);
         if ($classAvailable) {
             DB::transaction(function () use ($course, $request) {
-                $course->teachers()->attach($request->teacher_id, ['term_id' => $request->term_id]);
                 $course->classrooms()->attach($request->classroom_id, ['term_id' => $request->term_id,
                     'day_number' => $request->day_number,
                     'from_time' => $request->from,
                     'to_time' => $request->to
                 ]);
+                $id = DB::table('course_classroom')->latest('id')->first()->id;
+                $course->teachers()->attach($request->teacher_id, ['term_id' => $request->term_id, 'course_classroom_id' => $id]);
             });
             session()->flash('success', 'Teacher Assigned to Course Successfully');
         } else {

@@ -20,6 +20,6 @@ class Teacher extends Model
 
     public function courses()
     {
-        return $this->belongsToMany(Course::class, 'course_teacher');
+        return $this->belongsToMany(Course::class, 'course_teacher')->withPivot('term_id', 'course_classroom_id');
     }
 }

@@ -59,6 +59,34 @@
                         </a>
                     </li>
                     @endrole
+                    @role('head_university')
+                    <li>
+                        <a href="{{ route('dashboard.headUniversity.allFaculties') }}">
+                            <i class="fa fa-list"></i>
+                            All Faculties
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.headUniversity.allFacultiesProfessors') }}">
+                            <i class="far fa-users"></i>
+                            Faculty professors
+                        </a>
+                    </li>
+                    @endrole
+                    @role('head_faculty')
+                    <li>
+                        <a href="{{ route('dashboard.headFaculty.allDepartments') }}">
+                            <i class="fa fa-list" aria-hidden="true"></i>
+                            All departments
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.headFaculty.allProfessors') }}">
+                            <i class="far fa-users"></i>
+                            Faculty professors
+                        </a>
+                    </li>
+                    @endrole
                     @role('head_department')
                     <li>
                         <a href="{{ route('dashboard.department.courses', auth()->user()->headDepartment->department_id) }}">
@@ -92,22 +120,45 @@
                     </li>
                     @endrole
                     @role('teacher')
+                    @if(!auth()->user()->hasRole('head_faculty'))
+                        <li>
+                            <a href="{{ route('dashboard.teacher.my-courses', auth()->user()->teacher->id) }}">
+                                <i class="fa fa-book" aria-hidden="true"></i>
+                                My Courses
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.teacher.alerts', auth()->user()->teacher->id) }}">
+                                <i class="fa fa-bell" aria-hidden="true"></i>
+                                Students Alerts
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('dashboard.teacher.calender', auth()->user()->teacher->id) }}">
+                                <i class="fa fa-calendar" aria-hidden="true"></i>
+                                Term Schedule
+                            </a>
+                        </li>
+                    @endif
+                    @endrole
+                    @role('academic_advisor')
                     <li>
-                        <a href="{{ route('dashboard.teacher.my-courses', auth()->user()->teacher->id) }}">
-                            <i class="fa fa-book" aria-hidden="true"></i>
-                            My Courses
+                        {{-- {{$userid=Auth::user()->id}} --}}
+                        <a href="{{ route('dashboard.academicAdvisor.profile',Auth::user()->id) }}">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            My Profile
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dashboard.teacher.alerts', auth()->user()->teacher->id) }}">
-                            <i class="fa fa-bell" aria-hidden="true"></i>
-                            Students Alerts
+                        <a href="{{ route('dashboard.academicAdvisor.myStudents',Auth::user()->id) }}">
+                            <i class="far fa-users"></i>
+                            My Students
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dashboard.teacher.calender', auth()->user()->teacher->id) }}">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                            Term Schedule
+                        <a href="{{ route('dashboard.academicAdvisor.allPendingRequests') }}">
+                            <i class="fa fa-inbox" aria-hidden="true"></i>
+                            Pending Requests
                         </a>
                     </li>
                     @endrole
@@ -122,6 +173,45 @@
                         <a href="{{ route('dashboard.teacher_assistants.calender', auth()->user()->teacherAssistant->id) }}">
                             <i class="fa fa-calendar" aria-hidden="true"></i>
                             Term Schedule
+                        </a>
+                    </li>
+                    @endrole
+                    @role('students')
+                    <li>
+                        {{-- {{$userid=Auth::user()->id}} --}}
+                        <a href="{{ route('dashboard.student.profile',Auth::user()->id) }}">
+                            <i class="glyphicon glyphicon-user"></i>
+                            My Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.student.myCourses',Auth::user()->id) }}">
+                            <i class="glyphicon glyphicon-file"></i>
+                            My Courses
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.student.registerCourses') }}">
+                            <i class="glyphicon glyphicon-pencil"></i>
+                            Register Courses
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.student.alerts',Auth::user()->id) }}">
+                            <i class="glyphicon glyphicon-exclamation-sign"></i>
+                            My Alerts
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.student.transcript',Auth::user()->id) }}">
+                            <i class="far fa-file-spreadsheet"></i>
+                            View Transcript
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('dashboard.student.payment') }}">
+                            <i class="glyphicon glyphicon-credit-card"></i>
+                            Pay Online
                         </a>
                     </li>
                     @endrole

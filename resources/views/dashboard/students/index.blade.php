@@ -75,9 +75,11 @@
                                         aria-label="Students Count: activate to sort column ascending">
                                         Religion
                                     </th>
+                                    @role('admin')
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
                                     </th>
+                                    @endrole
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -97,6 +99,7 @@
                                         <td>{{ $student->birth_date }}</td>
                                         <td>{{ $student->national_id }}</td>
                                         <td>{{ ucfirst($student->religion) }}</td>
+                                        @role('admin')
                                         <td>
                                             <a href="{{ route('dashboard.students.edit', $student->student->id) }}">
                                                 <button class="btn btn-warning">
@@ -115,6 +118,7 @@
                                                 </button>
                                             </form>
                                         </td>
+                                        @endrole
                                     </tr>
                                 @endforeach
                                 </tbody>

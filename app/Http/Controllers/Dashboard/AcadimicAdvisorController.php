@@ -9,44 +9,25 @@ use App\Http\Controllers\Controller;
 use App\pending_courses;
 use App\Student;
 use App\User;
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 
 class AcadimicAdvisorController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Application|Factory|View
-     */
-    public function index()
+
+    public function showMyStudents(User $user)
     {
-        return view('dashboard.academicAdvisor.academicAdvisorHome');
-
-    }
-
-
-    public function showMyStudents(int $id)
-    {
-        $user = User::findOrFail($id);
         $academicAdvisor = $user->academicAdvisor;
-        $student = $academicAdvisor->student;
-        return view('dashboard.academicAdvisor.myStudents', ['student' => $student]);
-
+        $students = $academicAdvisor->student()->with('user')->get();
+        return view('dashboard.academicAdvisor.myStudents', compact('students'));
     }
 
 
-    public function showStudentData(int $id)
+    public function showStudentData(Student $student)
     {
-        $user = User::findOrFail($id);
-        $student = $user->student;
-        return view('dashboard.academicAdvisor.studentData', ['student' => $student]);
-
+        return view('dashboard.academicAdvisor.studentData', compact('student'));
     }
 
     public function goIssue(int $id)
@@ -57,9 +38,8 @@ class AcadimicAdvisorController extends Controller
 
     }
 
-    public function showMyProfile(int $id)
+    public function showMyProfile(User $user)
     {
-        $user = User::findOrFail($id);
         return view('dashboard.academicAdvisor.profile', compact('user'));
     }
 

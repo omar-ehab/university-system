@@ -70,7 +70,7 @@
 	width:100px;
 	height:100px;
   }
-  
+
   .row:nth-of-type(2) .col-xs-5{
 	display:flex;
 	flex-direction:column;
@@ -205,10 +205,10 @@
 	  <a href="{{ route('dashboard.student.index') }}"><button class="btn btn-dark">Back</button></a>
 	  <a href="#"><button class="btn btn-success">Next Step</button></a>
     </div>
-   
+
   </div><!--wrapper end-->
-  
- 
+
+
 
 </div>
 </body>

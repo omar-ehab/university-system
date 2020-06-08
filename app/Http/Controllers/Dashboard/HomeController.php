@@ -73,10 +73,10 @@ class HomeController extends Controller
         $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
         $coursesCount = auth()->user()->teacher->courses()->count();
         $courseIds = auth()->user()->teacher->courses->pluck('id');
-        $studentsCount = DB::table('student_course')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->count();
+        $studentsCount = DB::table('course_students')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->count();
         $alertsCount = Alert::whereIn('course_id', $coursesIds)->count();
         $materialsCount = Material::where('user_id', auth()->user()->id)->count();
-        $studentIds = DB::table('student_course')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->get()->pluck('id');
+        $studentIds = DB::table('course_students')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->get()->pluck('id');
 
         $chart[0] = Student::whereIn('id', $studentIds)->where('department_id', auth()->user()->teacher->department_id)->where('cgpa', '>', 3.5)->count();
         $chart[1] = Student::whereIn('id', $studentIds)->where('department_id', auth()->user()->teacher->department_id)->where('cgpa', '>', 3)->where('cgpa', '<=', 3.5)->count();
@@ -93,10 +93,10 @@ class HomeController extends Controller
         $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
         $coursesCount = auth()->user()->teacherAssistant->courses()->count();
         $courseIds = auth()->user()->teacherAssistant->courses->pluck('id');
-        $studentsCount = DB::table('student_course')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->count();
+        $studentsCount = DB::table('course_students')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->count();
         $alertsCount = Alert::whereIn('course_id', $coursesIds)->count();
         $materialsCount = Material::where('user_id', auth()->user()->id)->count();
-        $studentIds = DB::table('student_course')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->get()->pluck('id');
+        $studentIds = DB::table('course_students')->whereIn('course_id', $courseIds)->where('term_id', $currentTerm->id)->get()->pluck('id');
 
         $chart[0] = Student::whereIn('id', $studentIds)->where('department_id', auth()->user()->teacherAssistant->department_id)->where('cgpa', '>', 3.5)->count();
         $chart[1] = Student::whereIn('id', $studentIds)->where('department_id', auth()->user()->teacherAssistant->department_id)->where('cgpa', '>', 3)->where('cgpa', '<=', 3.5)->count();

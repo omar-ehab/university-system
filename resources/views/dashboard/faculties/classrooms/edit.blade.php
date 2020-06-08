@@ -36,7 +36,7 @@
 
                         <div class="col-xs-12 form-group @error('floor') bad @enderror">
                             <label for="floor">Floor</label>
-                            <input type="number" min="5" class="form-control" id="floor" name="floor"
+                            <input type="number" min="0" class="form-control" id="floor" name="floor"
                                    placeholder="Floor"
                                    value="{{ $classroom->floor }}">
                             @error('floor')
