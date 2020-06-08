@@ -16,7 +16,7 @@
                     <p style="color:rgb(120, 141, 151)">you can view all alerts in courses</p>
                 </div>
                 <div class="x_content">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
                             <th>#</th>
@@ -54,7 +54,7 @@
                             @endif
 
                         @empty
-                            <P>No Courses yet ...</P>
+                            <P>No Alerts for you ...</P>
 
                         @endforelse
 

@@ -202,7 +202,7 @@
     </div><!--row end-->
     <br><br>
     <div style="float: right; margin-right:8px" >
-	  <a href="{{ route('dashboard.student.index') }}"><button class="btn btn-dark">Back</button></a>
+	  <a href="{{ route('dashboard.home') }}"><button class="btn btn-dark">Back</button></a>
 	  <a href="#"><button class="btn btn-success">Next Step</button></a>
     </div>
 

@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use App\pending_courses;
 use App\Student;
 use App\Term;
-
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -21,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class StudentController extends Controller
 {
@@ -83,11 +83,14 @@ class StudentController extends Controller
         $pres = Course::find($id)->course_prerequisites;
         $collection = new collection();
         $flag = 0;
+        $currentTerm = Term::where('start', '<=', Carbon::now())->where('end', '>=', Carbon::now())->first();
+
         foreach ($pres as $pre) {
             $course_pre = Course::findOrFail($pre->prerequisite_id);
             $collection->push($course_pre);
         }
         $inters = $student_courses->intersect($collection);
+
         foreach ($inters as $inter) {
             $flag = 0;
             if ($inter->pivot->passed == 0) {
@@ -97,18 +100,23 @@ class StudentController extends Controller
 
         }
 
+
         if ($flag == 1) {
             return view('dashboard.student.courseConflict');
-        } else {
+        } elseif($flag == 0 && $currentTerm->can_register) {
             $theCourse = Course::find($id);
             $pending_request = new pending_courses();
             $pending_request->course_id = $id;
             $pending_request->student_id = $student->id;
-            $pending_request->term_id = 1;//hna mfrood al term ally opened by IT member
+            $pending_request->term_id = $currentTerm->id;//hna mfrood al term ally opened by IT member
             $pending_request->save();
+            session()->flash('success', 'You have Successfully Added this Course!');
+            return redirect()->back();
+        } else {
+            session()->flash('error', 'Registeration Form is closed now!');
+            return redirect()->back(); 
         }
-        session()->flash('success', 'You have Successfully Added this Course!');
-        return redirect()->back();
+        
 
     }
 
