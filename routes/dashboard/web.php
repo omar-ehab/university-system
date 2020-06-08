@@ -24,7 +24,6 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::get('get_advisors_by_department_ajax', 'StudentController@get_advisors_by_department_ajax')->name('get_advisors_by_department_ajax');
         Route::resource('teachers', 'TeacherController')->except('show');
         Route::resource('teacher-assistants', 'TeacherAssistantController')->except('show');
-        Route::get('teacher-assistants/academic-advisor/{teacherAssistant}', 'TeacherAssistantController@makeAcademicAdvisor')->name('teacher-assistants.makeAcademicAdvisor');
         Route::resource('students', 'StudentController')->except('show');
     });
 
@@ -43,6 +42,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::get('calender/{department}', 'HeadDepartmentController@calender')->name('calender');
         Route::get('teacher-assistants/academic-advisor/{academicAdvisor}/assignStudents', 'TeacherAssistantController@assignStudents')->name('teacher-assistants.assignStudents');
         Route::post('teacher-assistants/academic-advisor/{academicAdvisor}/assignStudentsSave', 'TeacherAssistantController@assignStudentsSave')->name('teacher-assistants.assignStudentsSave');
+        Route::get('teacher-assistants/academic-advisor/{teacherAssistant}', 'TeacherAssistantController@makeAcademicAdvisor')->name('teacher-assistants.makeAcademicAdvisor');
     });
 
     //routes of teacher
@@ -75,8 +75,6 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
 
     //routes of students
     Route::middleware('role:student')->group(function () {
-
-
         Route::get('student', 'studentController@index')->name('student.index');
         Route::get('student/{user}', 'studentController@showProfile')->name('student.profile');
         Route::get('courses/{user}', 'studentController@showCourses')->name('student.myCourses');
@@ -86,18 +84,14 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
         Route::get('courses/{course}/material', 'studentController@showCourseMaterial')->name('student.showCourseMaterial');
         Route::get('transcript/{user}', 'studentController@showTranscript')->name('student.transcript');
         Route::get('alerts/AlertData/{alert}', 'studentController@showAlertData')->name('student.alertData');
-
         Route::get('transcript/termTranscript/{term}', 'studentController@showTermTranscript')->name('student.termTranscript');
         Route::get('regiserCourses/addCourse/{course}', 'studentController@addCourse')->name('student.addCourse');
-
-
     });
 
 
     Route::middleware('role:academic_advisor')->group(function () {
 
         //academic advisor routes here
-        Route::get('academicAdvisor', 'AcadimicAdvisorController@index')->name('academicAdvisor.index');
         Route::get('academicAdvisor/{user}/profile', 'AcadimicAdvisorController@showMyProfile')->name('academicAdvisor.profile');
         Route::get('academicAdvisor/{user}/students', 'AcadimicAdvisorController@showMyStudents')->name('academicAdvisor.myStudents');
         Route::get('academicAdvisor/viewAllPendingRequests', 'AcadimicAdvisorController@viewAllPendingRequests')->name('academicAdvisor.allPendingRequests');
@@ -113,14 +107,11 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
 
 
     Route::middleware('role:head_faculty')->group(function () {
-
         //Head Faculty area
         Route::get('headFaculty', 'HeadFaculty2Controller@index')->name('headFaculty.index');
         Route::get('headFaculty/allDepartments', 'HeadFaculty2Controller@showAllDepartments')->name('headFaculty.allDepartments');
         Route::get('headFaculty/allProfessors', 'HeadFaculty2Controller@showAllprofessors')->name('headFaculty.allProfessors');
         Route::get('headFaculty/allProfessors/departmentsProfessors/{department}', 'HeadFaculty2Controller@showDepartmentprofessors')->name('headFaculty.showDepartmentProfessors');
-
-
     });
 
     Route::middleware('role:head_university')->group(function () {

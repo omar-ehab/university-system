@@ -6,6 +6,7 @@ use App\AcademicAdvisor;
 use App\Course;
 use App\Faculty;
 use App\Http\Controllers\Controller;
+use App\Student;
 use App\TeacherAssistant;
 use App\Term;
 use App\User;
@@ -149,9 +150,28 @@ class TeacherAssistantController extends Controller
             'department_id' => $teacherAssistant->department_id
         ]);
         $user = $teacherAssistant->user;
-        $user->attachRole('academicAdvisor');
+        $user->attachRole('academic_advisor');
         session()->flash('success', 'Request Done Successfully');
-        return redirect()->route('dashboard.teacher-assistants.index');
+        return redirect()->back();
+    }
+
+    public function assignStudents(AcademicAdvisor $academicAdvisor)
+    {
+        $students = Student::where('department_id', $academicAdvisor->department_id)->where('academic_advisor_id', null)->get();
+        return view('dashboard.academicAdvisor.assignStudents', compact('students', 'academicAdvisor'));
+    }
+
+    public function assignStudentsSave(Request $request, AcademicAdvisor $academicAdvisor)
+    {
+        $this->validate($request, [
+            'student_ids' => 'required|array',
+            'student_ids.*' => 'required|integer|distinct'
+        ]);
+        Student::whereIn('id', $request->student_ids)->update([
+            'academic_advisor_id' => $academicAdvisor->id
+        ]);
+        session()->flash('success', 'Students Assigned Successfully');
+        return redirect()->route('dashboard.department.teacherAssistants', $academicAdvisor->department_id);
     }
 
 

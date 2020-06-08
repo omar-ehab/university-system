@@ -67,9 +67,11 @@
                                         aria-label="Students Count: activate to sort column ascending">
                                         Religion
                                     </th>
+                                    @role(['admin', 'head_department'])
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Control: activate to sort column ascending">Control
                                     </th>
+                                    @endrole
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -88,7 +90,9 @@
                                         <td>{{ $assistant->birth_date }}</td>
                                         <td>{{ $assistant->national_id }}</td>
                                         <td>{{ ucfirst($assistant->religion) }}</td>
+
                                         <td>
+                                            @role('head_department')
                                             @if(!\App\AcademicAdvisor::where('user_id', $assistant->id)->where('department_id', $assistant->teacherAssistant->department_id)->first())
                                                 <a href="{{ route('dashboard.teacher-assistants.makeAcademicAdvisor', $assistant->teacherAssistant->id) }}">
                                                     <button class="btn btn-primary">
@@ -97,13 +101,15 @@
                                                     </button>
                                                 </a>
                                             @else
-                                                <a href="{{ route('dashboard.teacher-assistants.assignStudents', $assistant->teacherAssistant->id) }}">
+                                                <a href="{{ route('dashboard.teacher-assistants.assignStudents', $assistant->academicAdvisor->id) }}">
                                                     <button class="btn btn-primary">
                                                         <i class="fa fa-users"></i>
                                                         Assign Students
                                                     </button>
                                                 </a>
                                             @endif
+                                            @endrole
+                                            @role('admin')
                                             <a href="{{ route('dashboard.teacher-assistants.edit', $assistant->teacherAssistant->id) }}">
                                                 <button class="btn btn-warning">
                                                     <i class="fa fa-edit"></i>
@@ -120,7 +126,9 @@
                                                     Delete
                                                 </button>
                                             </form>
+                                            @endrole
                                         </td>
+
                                     </tr>
                                 @endforeach
                                 </tbody>

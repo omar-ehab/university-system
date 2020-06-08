@@ -4,16 +4,20 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Alert;
 use App\Course;
+use App\Faculty;
 use App\Http\Controllers\Controller;
 use App\pending_courses;
 use App\Student;
 use App\User;
-use DB;
+use Exception;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class StudentController extends Controller
@@ -23,11 +27,10 @@ class StudentController extends Controller
      *
      * @return Application|Factory|View
      */
-
-    //  ours afnaaaan rewaaaaan
     public function index()
     {
-        return view('dashboard.student.studentHome');
+        $students = User::whereRoleIs('student')->with('student.department')->get();
+        return view('dashboard.students.index', compact('students'));
     }
 
     public function showProfile(int $id)
@@ -196,10 +199,9 @@ class StudentController extends Controller
             'national_id' => 'required|digits:14',
             'religion' => 'required',
             'password' => 'required|min:6|confirmed',
-            'academic_advisor_id' => 'required'
         ]);
         $request['password'] = bcrypt($request->password);
-        $academic_advisor_id = User::find($request->academic_advisor_id)->academicAdvisor->id;
+        $academic_advisor_id = $request->academic_advisor_id ? User::find($request->academic_advisor_id)->academicAdvisor->id : null;
         DB::transaction(function () use ($request, $academic_advisor_id) {
             $user = User::create($request->all());
             Student::create([
@@ -275,7 +277,7 @@ class StudentController extends Controller
             $student->delete();
             $user->delete();
             session()->flash('success', 'Student Deleted Successfully');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             session()->flash('error', 'Something went wrong please try again later');
         }
         return redirect()->route('dashboard.students.index');

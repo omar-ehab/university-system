@@ -73,7 +73,7 @@ class TeacherController extends Controller
             $user->attachRole('teacher');
         });
         session()->flash('success', 'Teacher Created Successfully');
-        return redirect()->route('dashboard.teacher-assistants.index');
+        return redirect()->route('dashboard.teachers.index');
     }
 
     /**
@@ -86,7 +86,7 @@ class TeacherController extends Controller
     {
         $faculties = Faculty::all();
         $teacher = Teacher::with('user', 'department')->where('id', $id)->firstOrFail();
-        return view('dashboard.teacher-assistants.edit', compact('faculties', 'teacher'));
+        return view('dashboard.teachers.edit', compact('faculties', 'teacher'));
     }
 
     /**
@@ -116,7 +116,7 @@ class TeacherController extends Controller
             $teacher->update(['department_id' => $request->department_id]);
         });
         session()->flash('success', 'Teacher Updated Successfully');
-        return redirect()->route('dashboard.teacher-assistants.index');
+        return redirect()->route('dashboard.teachers.index');
     }
 
     /**
@@ -138,7 +138,7 @@ class TeacherController extends Controller
         } catch (\Exception $e) {
             session()->flash('error', 'Something went wrong please try again later');
         }
-        return redirect()->route('dashboard.teacher-assistants.index');
+        return redirect()->route('dashboard.teachers.index');
     }
 
 

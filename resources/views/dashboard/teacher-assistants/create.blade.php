@@ -60,7 +60,8 @@
 
                         <div class="col-xs-12 form-group @error('mobile') bad @enderror">
                             <label for="name">Mobile</label>
-                            <input type="text" class="form-control" id="mobile" name="mobile"
+                            <input type="text" pattern="\d*" minlength="11" maxlength="11" class="form-control"
+                                   id="mobile" name="mobile"
                                    placeholder="Mobile" value="{{ old('mobile') }}">
 
                             @error('mobile')

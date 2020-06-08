@@ -1,231 +1,175 @@
-<!DOCTYPE html>
-<html lang="en">
-<!-- head navigation -->
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}"/>
+@extends('layouts.dashboard.app')
 
+@section('content')
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>
+                    <i class="far fa-users" aria-hidden="true"></i> Students
 
-    <!-- Bootstrap -->
-    <link href="{{ asset('vendors/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="{{ asset('vendors/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="{{ asset('vendors/nprogress/nprogress.css') }}" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="{{ asset('/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">
-    <!-- bootstrap-progressbar -->
-    <link href="{{ asset('vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
-    <!-- bootstrap-daterangepicker -->
-    <link href="{{ asset('vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
-    <!-- Font Awesome Pro -->
-    <script src="{{ asset('js/font-awsome.min.js') }}"></script>
-
-    <!-- Custom Theme Style -->
-    <link href="{{ asset('css/custom.css') }}" rel="stylesheet">
-    <!-- Noty css -->
-    <link href="{{ asset('vendors/noty/noty.css') }}" rel="stylesheet">
-</head>
-<title>@yield('title')</title>
-@stack('styles')
-<!-- /head navigation -->
-<body class="nav-md">
-<div class="container body">
-    <div class="main_container">
-        <!-- side navigation -->
-        <div class="col-md-3 left_col">
-            <div class="left_col scroll-view">
-                <div class="navbar nav_title" style="border: 0;">
-                    <a href="/" class="site_title"><img src="{{asset('images/logo.png')}}" alt="pua logo" class="sideNav-logo">
-                        <span>PUA system</span></a>
-                </div>
-        
+                </h2>
                 <div class="clearfix"></div>
-        
-                <!-- menu profile quick info -->
-                <div class="profile clearfix">
-                    <div class="profile_pic">
-                        <img src="{{ asset('images/user.png') }}" alt="profile picture" class="img-circle profile_img">
-                    </div>
-                    <div class="profile_info">
-                        <span>Welcome,</span>
-                        <h2>{{Auth::user()->name}}</h2>
-                    </div>
-                </div>
-                <!-- /menu profile quick info -->
-        
-                <br/>
-        
-                <!-- sidebar menu -->
-                <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                    <div class="menu_section">
-                        <ul class="nav side-menu">
-                            <li>
-                                <a href="{{ route('dashboard.academicAdvisor.index') }}">
-        
-                                    <i class="far fa-home-lg-alt"></i> Home</a></li>
-                            <li>
-                                {{-- {{$userid=Auth::user()->id}} --}}
-                                <a href="{{ route('dashboard.academicAdvisor.profile',Auth::user()->id) }}">
-                                    <i class="glyphicon glyphicon-user"></i>
-                                    &nbsp&nbspMy Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('dashboard.academicAdvisor.myStudents',Auth::user()->id) }}">
-                                    <i class="far fa-users"></i>
-                                    My Students
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('dashboard.academicAdvisor.allPendingRequests') }}">
-                                    <i class="glyphicon glyphicon-inbox"></i>
-                                    &nbsp&nbspPending requests
-                                </a>
-                            </li>
-                           
-                        </ul>
-                    </div>
-                </div>
-                <!-- /sidebar menu -->
+                @role('admin')
+                <a href="{{ route('dashboard.students.create') }}">
+                    <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
+                </a>
+                @endrole
             </div>
-        </div>
-        
-    <!-- /side navigation -->
-
-        <!-- top navigation -->
-    <div class="top_nav">
-    <div class="nav_menu">
-        <nav>
-            <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-            </div>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="">
-                    <a href="javascript:" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                        <img src="{{ asset('images/user.png') }}" alt="">{{Auth::user()->name}}
-                        <span class=" fa fa-angle-down"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-usermenu pull-right">
-                        <li><a href="javascript:;"> Profile</a></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
-    </div>
-</div>
-    <!-- /top navigation -->
-
-        <!-- page content -->
-        <div class="right_col" role="main">
-            <div class="row">
-
-                <div class="row x_title">
-                    
-                    <div class="col-md-5 col-sm-5   form-group pull-right top_search">
-                        <form action="{{route('dashboard.studentSearch')}}" method="GET">
-                        <div class="input-group">
-                        <input type="search" name="search" class="form-control" placeholder="Search for Student..">
-                        <span class="input-group-btn">
-                        <button class="btn btn-secondary" type="submit">Go!</button>
-                        </span>
-                        </div>
-                    </form>
-                        </div>
-                </div>
-              
-                <div style="padding: 10px;">
-
-                    @php
-                    $count=0;
-                        @endphp
-
-
-<div class="col-md-6 col-sm-6 " style="width: 100%">
-    <div class="x_panel">
-    <div class="x_title">
-    <h2>My students </h2>
-    <br>
-    <div class="clearfix"></div>
-    <p style="color:rgb(120, 141, 151)">you can view each student data</p>
-    </div>
-    <div class="x_content">
-    <table class="table table-hover">
-    <thead>
-    <tr>
-    <th>#</th>
-    <th>Student Name</th>
-    <th>Student ID</th>
-    <th>View</th>
-    </tr>
-     </thead>
-    <tbody>
-                            @forelse ($student as $student)
-
-                            <p>
-                
-                            @php
-                             $studentuser=$student->user;
-                             $count=$count+1;
-        
-                            @endphp        
-                             
-
-                            <tr>
-                                <th scope="row">{{$count}}</th>
-                                <td> {{$studentuser->name}} </td>
-                                <td>{{$student->student_id}}</td>
-                                <td><a href="{{ route('dashboard.academicAdvisor.showStudentData',$studentuser->id) }}">   
-                                    <span  class="glyphicon glyphicon-eye-open
-                                    " aria-hidden="true"></span></a></td>
+            <div class="x_content">
+                <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="faculties"
+                                   class="table table-striped table-bordered dataTable no-footer table-responsive"
+                                   role="grid" aria-describedby="datatable_info">
+                                <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
+                                        colspan="1" aria-sort="ascending">#
+                                    </th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
+                                        aria-label="Name: activate to sort column descending">ID
+                                    </th>
+                                    <th class="sorting_asc" tabindex="0" aria-controls="datatable" rowspan="1"
+                                        colspan="1" aria-sort="ascending"
+                                        aria-label="Name: activate to sort column descending">Name
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Code: activate to sort column ascending">
+                                        Email
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Code: activate to sort column ascending">
+                                        Mobile
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        Faculty
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        Department
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Departments Count: activate to sort column ascending">
+                                        CGPA
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Classrooms Count: activate to sort column ascending">
+                                        Gender
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Nationality
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Birth date
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        National Id
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Students Count: activate to sort column ascending">
+                                        Religion
+                                    </th>
+                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
+                                        aria-label="Control: activate to sort column ascending">Control
+                                    </th>
                                 </tr>
-                                           
-                                         @empty
-                                         <P>No students yet ...</P>
-                    
-                                @endforelse 
-
-                                
-
-</tbody>
-</table>
-</div>
-</div>
-</div>
-
-                            </div>
-
-</div>
+                                </thead>
+                                <tbody>
+                                @foreach($students as $index => $student)
+                                    <tr role="row" class="odd">
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $student->student_id }}</td>
+                                        <td>{{ $student->user->name }}</td>
+                                        <td><a href="mailto:{{ $student->user->email }}"
+                                               style="text-decoration: underline">{{ $student->user->email }}</a></td>
+                                        <td>{{ $student->user->mobile }}</td>
+                                        <td>{{ $student->department->faculty->name }}</td>
+                                        <td>{{ $student->department->name }}</td>
+                                        <td>{{ $student->cgpa }}</td>
+                                        <td>{{ ucfirst($student->user->gender) }}</td>
+                                        <td>{{ ucfirst($student->user->nationality) }}</td>
+                                        <td>{{ $student->user->birth_date }}</td>
+                                        <td>{{ $student->user->national_id }}</td>
+                                        <td>{{ ucfirst($student->user->religion) }}</td>
+                                        <td>
+                                            <a href="{{ route('dashboard.academicAdvisor.showStudentData',$student->id) }}">
+                                                <button class="btn btn-primary">
+                                                    <i class="fa fa-eye"></i>
+                                                    Show
+                                                </button>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- /page content -->
-
-       
     </div>
-</div>
+@endsection
 
+@push('styles')
+    <link href="{{ asset('vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}"
+          rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+@endpush
 
- <!-- footer content -->
- <footer>
-    <div class="pull-right">
-        <b>&copy; Faculty of Engineering Computer Department &copy;</b>
-    </div>
-    <div class="clearfix"></div>
-</footer>
-    <!-- /footer content -->
-
-<!-- scripts content -->
-@include('layouts.dashboard._scripts')
-@stack('scripts')
-<!-- /scripts content -->
-<!-- session messages -->
-@include('partials._session')
-<!-- /session messages -->
-</body>
-</html>
+@push('scripts')
+    <script src="{{ asset('vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
+    <script src="{{ asset('vendors/jszip/dist/jszip.min.js') }}"></script>
+    <script src="{{ asset('vendors/pdfmake/build/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('vendors/pdfmake/build/vfs_fonts.js') }}"></script>
+    <script>
+        $('#faculties').DataTable({
+            dom: "Blfrtip",
+            buttons: [
+                {
+                    extend: "copy",
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+                {
+                    extend: "csv",
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+                {
+                    extend: "print",
+                    className: "btn-sm",
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5]
+                    }
+                },
+            ],
+            responsive: true
+        })
+    </script>
+@endpush
 

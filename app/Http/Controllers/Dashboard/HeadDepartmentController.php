@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Dashboard;
 use App\Course;
 use App\Department;
 use App\Http\Controllers\Controller;
-use App\Student;
 use App\Term;
 use App\User;
 use Illuminate\Http\Request;
@@ -34,7 +33,11 @@ class HeadDepartmentController extends Controller
 
     public function students(Department $department)
     {
-        $students = Student::where('department_id', $department->id)->with('user')->get();
+        $users = User::with('student')->get();
+        $students = $users->filter(function ($user) use ($department) {
+            return $user->student && $user->student->department_id == $department->id;
+        });
+
         return view('dashboard.students.index', compact('students'));
     }
 
