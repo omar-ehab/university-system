@@ -10,7 +10,7 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <table class="table table-hover" style="font-size:15px">
+                    <table class="table table-hover table-bordered" style="font-size:15px">
                         <thead style="font-size:16px ">
                         <tr>
                             <th>Data field</th>

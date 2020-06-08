@@ -8,6 +8,8 @@ use App\Faculty;
 use App\Http\Controllers\Controller;
 use App\pending_courses;
 use App\Student;
+use App\Term;
+
 use App\User;
 use Exception;
 use Illuminate\Contracts\Foundation\Application;
@@ -35,12 +37,9 @@ class StudentController extends Controller
 
     public function showProfile(int $id)
     {
-        // $article= Article::findOrFail($id);
+      
         $user = User::findOrFail($id);
-        //   $student=Student::findOrFail($id);
-        // dd($student);
         $student = $user->student;
-        // return view('dashboard.student.profile',['user'=>$user]);
         return view('dashboard.student.profile', ['student' => $student]);
 
     }
@@ -107,10 +106,9 @@ class StudentController extends Controller
             $pending_request->student_id = $student->id;
             $pending_request->term_id = 1;//hna mfrood al term ally opened by IT member
             $pending_request->save();
-
-            return view('dashboard.student.requestIsPending');
         }
-
+        session()->flash('success', 'You have Successfully Added this Course!');
+        return redirect()->back();
 
     }
 
@@ -141,15 +139,24 @@ class StudentController extends Controller
     }
 
     public function showTranscript(int $id)
-    {
+     {
         $user = User::findOrFail($id);
-        $student = $user->student;
+        $student=$user->student;
+       $data = [];
+       $terms = Term::all();
+       foreach($terms as $term)
+       {
+           $res = DB::table('course_students')
+           ->where('term_id', $term->id)
+           ->where('student_id', $student->id)
+           ->join('courses', 'course_students.course_id', '=', 'courses.id')
+           ->get();
+           $data[$term->name] = $res;
+       }
+       
+        return view('dashboard.student.transcript',compact('data'));
 
-        $student_course = $student->course_student;
-
-        return view('dashboard.student.transcript', compact('student_course'));
-
-    }
+     }
 
 
     public function showTermTranscript(int $id)

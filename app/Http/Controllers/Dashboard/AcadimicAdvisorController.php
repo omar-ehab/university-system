@@ -12,6 +12,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 
 class AcadimicAdvisorController extends Controller
@@ -88,13 +89,10 @@ class AcadimicAdvisorController extends Controller
 
         $alert->student_id = $id;
         $alert->body = request('body');
+        $alert->publish_date = Carbon::now();
         $alert->save();
 
 
-        //hard coded url
-        // return redirect('/articles');
-
-        //      return redirect(route('articles.index',$article));
 
 
         return redirect()->back()->with('message', "Alert has been issued , awaiting Doctor's approval");

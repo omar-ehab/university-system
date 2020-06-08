@@ -28,13 +28,13 @@ class HomeController extends Controller
         } elseif (auth()->user()->hasRole('teacher_assistant')) {
             return $this->teacherAssistantPage();
         } elseif (auth()->user()->hasRole('student')) {
-            return view('dashboard.student.studentHome');
-        } elseif (auth()->user()->hasRole('academicAdvisor')) {
-            return view('dashboard.academicAdvisor.academicAdvisorHome');
-        } elseif (auth()->user()->hasRole('headFaculty')) {
-            return view('dashboard.headFaculty.headFacultyHome');
-        } elseif (auth()->user()->hasRole('headUniversity')) {
-            return view('dashboard.headUniversity.headUniversityHome');
+            return view('dashboard.studentHome');
+        } elseif (auth()->user()->hasRole('academic_advisor')) {
+            return view('dashboard.academicAdvisorHome');
+        } elseif (auth()->user()->hasRole('head_faculty')) {
+            return view('dashboard.headFacultyHome');
+        } elseif (auth()->user()->hasRole('head_university')) {
+            return view('dashboard.headUniversityHome');
         }
     }
 
@@ -50,7 +50,8 @@ class HomeController extends Controller
         $chart[3] = Student::where('cgpa', '<=', 2)->count();
         $chart = json_encode($chart);
 
-        return view('dashboard.admin', compact('studentsCount', 'teachersCount', 'teacherAssistantCount', 'facultiesCount', '3', 'chart'));
+        return view('dashboard.admin', 
+        compact('studentsCount', 'teachersCount', 'teacherAssistantCount', 'facultiesCount', 'chart'));
     }
 
     private function headDepartmentPage()
@@ -64,7 +65,8 @@ class HomeController extends Controller
         $chart[2] = Student::where('department_id', auth()->user()->headDepartment->department_id)->where('cgpa', '>', 2)->where('cgpa', '<=', 3)->count();
         $chart[3] = Student::where('department_id', auth()->user()->headDepartment->department_id)->where('cgpa', '<=', 2)->count();
         $chart = json_encode($chart);
-        return view('dashboard.head_department', compact('coursesCount', 'teachersCount', 'teacherAssistantCount', 'studentsCount', 'chart'));
+        return view('dashboard.head_department', 
+        compact('coursesCount', 'teachersCount', 'teacherAssistantCount', 'studentsCount', 'chart'));
     }
 
     private function teacherPage()

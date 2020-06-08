@@ -99,64 +99,71 @@
                     </div>
                     <div class="x_content">
 
-              @forelse ($student_course as $student_course)
+              @forelse ($data as $index => $term)
 
-                           @php
-                           $term=$student_course->term;
-
-                           // $term=App\Term::findOrFail($student_course->term_id);
-                               
-                           @endphp
+                        
                            
-                           <a href="{{ route('dashboard.student.termTranscript',$term->id)}}">{{$term->name}}</a>
-
+                           {{-- <a href="{{ route('dashboard.student.termTranscript',$term->id)}}">{{$term->name}}</a> --}}
+                    <p>{{ $index }}</p>
+                    <div class="x_content">
+                        <table class="table table-hover table-bordered">
+                                                           <thead>
+                                                           <tr>
+                                                           <th style="text-align: center">#</th>
+                                                           <th style="text-align: center">course Name</th>
+                                                           <th style="text-align: center">course Code</th>
+                                                            <th style="text-align: center">course Credit Hours</th>
+                                                            <th style="text-align: center">course GPA</th>
+                       
+                                                           </tr>
+                                                            </thead>
+                       
+                       
+                                               @php
+                                               $count=0;
+                       
+                                               @endphp
+                       
+                       
+                                     @forelse ($term as $course)
+                       
+                                        
+                                       <tbody>
+                       
+                                            <tr>
+                                                {{-- {{ dd($c->name) }} --}}
+                                               <th scope="row">{{ $count }}</th>
+                                               <td> {{ $course->name }} </td>
+                                               <td>{{ $course->code }}</td>
+                                               <td>{{ $course->credit_hours }}</td>
+                                               <td>{{$course->cgpa}}</td>
+                                            </tr>
+                       
+                                               @empty
+                                            
+                                               none
+                                           @endforelse
                                
-                        @empty
-                     
-                            none
-                        @endforelse
+                       
+                           
+                                       </tbody>
+                                   </table>
+                                  
+                       </div>
+                               
+                @empty
+                    
+                    none
+                @endforelse
                          
 
 
-{{-- @forelse ($student_course_term as $student_course_term)
-
-@php
-//ana kda m3aia korsat al student dah
-$coursesssss=$student_course_term->course;
-$term_id=$course->first()->pivot->term_id;
-$term=App\Term::findOrFail($term_id);
-@endphp
-
-@foreach ($coursesssss as $course)
-
-@php
-    $term_id=$course->first()->pivot->term_id;
-$term=App\Term::findOrFail($term_id);
-@endphp
-<h3> {{$term->name}} </h3>
-@endforeach --}}
-   
-   
-
-                
-{{-- @php
- $count=0;
 
 
-    //$term_asln=App\Term::where('id',$student_course_term->term_id);
-@endphp    
- --}}
+                <div class="button">
+                    <i class="fa fa-print" style="float:right;padding-right:25px " onclick="window.print()"></i>
 
- 
-{{-- 
-@empty
-<P>No Transcript exists...</P>
-
-                
-
-   @endforelse --}}
-
-
+                   </div>
 
 
 
@@ -167,8 +174,20 @@ $term=App\Term::findOrFail($term_id);
             </div>
         </div>
 
-        @include('layouts.dashboard._scripts')
-@stack('scripts')
+        <script>
+            setTimeout(function(){
+                window.print();
+            }, 500);
+            
+        </script>
+        <style>
+            @media print{
+                .button{
+                    display: none;
+                }
+            }
+            
+        </style>
     </body>
 
 </html>

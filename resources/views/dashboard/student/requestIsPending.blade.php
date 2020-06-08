@@ -3,8 +3,6 @@
     <!-- page content -->
     <div class="right_col" role="main">
         <div class="row">
-            {{-- @yield('content') --}}
-
             {{-- class="col-md-9" --}}
             <div style="padding: 10px;">
 

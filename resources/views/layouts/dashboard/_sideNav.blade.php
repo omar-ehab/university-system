@@ -176,7 +176,7 @@
                         </a>
                     </li>
                     @endrole
-                    @role('students')
+                    @role('student')
                     <li>
                         {{-- {{$userid=Auth::user()->id}} --}}
                         <a href="{{ route('dashboard.student.profile',Auth::user()->id) }}">
@@ -185,7 +185,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('dashboard.student.myCourses',Auth::user()->id) }}">
+                        <a href="{{ route('dashboard.student.myCourses', Auth::user()->id) }}">
                             <i class="glyphicon glyphicon-file"></i>
                             My Courses
                         </a>

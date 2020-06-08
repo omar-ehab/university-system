@@ -9,9 +9,7 @@
 
                 </h2>
                 <div class="clearfix"></div>
-                <a href="{{ route('dashboard.faculties.create') }}">
-                    <button class="btn btn-primary "><i class="fa fa-plus"></i> Add New</button>
-                </a>
+            
             </div>
             <div class="x_content">
                 <div id="datatable_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
@@ -37,21 +35,7 @@
                                         aria-label="Code: activate to sort column ascending" style="width: 250px;">
                                         Faculty Dean
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending"
-                                        style="width: 70px;">
-                                        Departments Count
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Classrooms Count: activate to sort column ascending"
-                                        style="width: 70px;">
-                                        Classrooms Count
-                                    </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Students Count: activate to sort column ascending"
-                                        style="width: 70px;">
-                                        Students Count
-                                    </th>
+                                    
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -61,9 +45,6 @@
                                         <td>{{ $faculty->name }}</td>
                                         <td>{{ $faculty->code }}</td>
                                         <td>{{ $faculty->dean->user->name ?? '--' }}</td>
-                                        <td>{{ $faculty->departments_count }}</td>
-                                        <td>{{ $faculty->classrooms_count }}</td>
-                                        <td>{{ $faculty->students_count }}</td>
 
                                     </tr>
                                 @endforeach

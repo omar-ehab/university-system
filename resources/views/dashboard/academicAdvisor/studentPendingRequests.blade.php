@@ -12,7 +12,7 @@
                 <p style="color:rgb(120, 141, 151)">you can accept or decline a request</p>
             </div>
             <div class="x_content">
-                <table class="table table-hover">
+                <table class="table table-hover table-bordered">
                     <thead>
                     <tr>
                         <th>#</th>

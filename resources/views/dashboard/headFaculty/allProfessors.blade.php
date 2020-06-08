@@ -34,10 +34,7 @@
                                         aria-label="Code: activate to sort column ascending">
                                         Mobile
                                     </th>
-                                    <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
-                                        aria-label="Departments Count: activate to sort column ascending">
-                                        Faculty
-                                    </th>
+                                
                                     <th class="sorting" tabindex="0" aria-controls="datatable" rowspan="1" colspan="1"
                                         aria-label="Departments Count: activate to sort column ascending">
                                         Department
@@ -72,7 +69,6 @@
                                         <td><a href="mailto:{{ $teacher->user->email }}"
                                                style="text-decoration: underline">{{ $teacher->user->email }}</a></td>
                                         <td>{{ $teacher->user->mobile }}</td>
-                                        <td>{{ $teacher->department->faculty->name }}</td>
                                         <td>{{ $teacher->department->name }}</td>
                                         <td>{{ ucfirst($teacher->user->gender) }}</td>
                                         <td>{{ ucfirst($teacher->user->nationality) }}</td>

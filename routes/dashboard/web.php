@@ -77,7 +77,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::middleware('role:student')->group(function () {
         Route::get('student', 'studentController@index')->name('student.index');
         Route::get('student/{user}', 'studentController@showProfile')->name('student.profile');
-        Route::get('courses/{user}', 'studentController@showCourses')->name('student.myCourses');
+        Route::get('courses/users/{user}', 'studentController@showCourses')->name('student.myCourses');
         Route::get('regiserCourses', 'studentController@registerCourses')->name('student.registerCourses');
         Route::get('alerts/{user}', 'studentController@showAlerts')->name('student.alerts');
         Route::get('payment', 'studentController@payOnline')->name('student.payment');

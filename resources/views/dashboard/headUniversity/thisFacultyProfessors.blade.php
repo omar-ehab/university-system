@@ -35,12 +35,13 @@
 
                             {{-- @if($professors) --}}
 
-                            <table class="table table-hover">
+                            <table class="table table-hover table-bordered">
                                 <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Professor Name</th>
                                     <th>view Professor</th>
+    
 
                                 </tr>
                                 </thead>

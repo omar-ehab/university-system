@@ -18,11 +18,12 @@
 
                 </div>
                 <div class="x_content">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-bordered">
                         <thead>
                         <tr>
                             <th>#</th>
                             <th>Faculty Name</th>
+                            <th>Control</th>
                         </tr>
                         </thead>
                         <tbody>
